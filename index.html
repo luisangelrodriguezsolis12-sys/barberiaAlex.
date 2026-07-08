@@ -202,6 +202,15 @@
   .svc-editor-row{display:grid; grid-template-columns:1.1fr 1.5fr .6fr .6fr auto; gap:8px; margin-bottom:8px;}
   .svc-editor-row input{padding:9px 10px; font-size:.85rem;}
   fieldset{border:1px solid var(--line); padding:16px; margin-bottom:18px;}
+  .theme-swatches{display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;}
+  .theme-swatch{display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; border:none; background:none; padding:0;}
+  .theme-swatch .dot{width:40px; height:40px; border-radius:50%; border:2px solid transparent; box-shadow:0 0 0 1px var(--line); transition:.2s;}
+  .theme-swatch.active .dot{border-color:var(--gold-light); box-shadow:0 0 0 3px rgba(201,161,90,.25);}
+  .theme-swatch span{font-size:.7rem; color:var(--muted); text-align:center; max-width:70px;}
+  .color-pickers{display:flex; flex-wrap:wrap; gap:16px; margin-top:8px;}
+  .color-picker-item{display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .color-picker-item input[type="color"]{width:46px; height:46px; padding:0; border:1px solid var(--line); border-radius:8px; background:none; cursor:pointer;}
+  .color-picker-item span{font-size:.7rem; color:var(--muted); text-align:center;}
   legend{padding:0 8px; color:var(--gold-light); font-size:.85rem;}
  
   @media (max-width:860px){
@@ -473,8 +482,60 @@
     }catch(e){ console.error(`[Firestore] Error guardando "${key}" tras ${Math.round(performance.now()-t0)}ms`, e); throw e; }
   }
  
+  const THEMES = {
+    dorado:  { label:'Negro y dorado',   bg:'#100d0a', bgAlt:'#181310', gold:'#c9a15a', burgundy:'#7a2f3d', cream:'#ede7dd' },
+    azul:    { label:'Azul noche',       bg:'#0a0e14', bgAlt:'#111722', gold:'#4fb8e0', burgundy:'#2b4a73', cream:'#e7edf4' },
+    verde:   { label:'Verde esmeralda',  bg:'#0b120e', bgAlt:'#131c16', gold:'#4caf7d', burgundy:'#2f5c46', cream:'#e6f0ea' },
+    vino:    { label:'Vino tinto',       bg:'#150a0d', bgAlt:'#1e1014', gold:'#c9788a', burgundy:'#5c1a2b', cream:'#f0e3e6' },
+    gris:    { label:'Gris moderno',     bg:'#111214', bgAlt:'#1a1b1e', gold:'#b0b6bd', burgundy:'#4a4f57', cream:'#eceef0' },
+    claro:   { label:'Claro/beige',      bg:'#f5efe6', bgAlt:'#ece3d3', gold:'#a67c3d', burgundy:'#7a2f3d', cream:'#2a2118' }
+  };
+ 
+  // Utilidades de color: a partir de 5 colores base, calcula el resto de la paleta automáticamente
+  function hexToRgb(hex){
+    hex = (hex || '#000000').replace('#','');
+    if(hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+    const num = parseInt(hex, 16) || 0;
+    return { r:(num>>16)&255, g:(num>>8)&255, b:num&255 };
+  }
+  function rgbToHex(r,g,b){
+    const c = v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2,'0');
+    return '#' + c(r) + c(g) + c(b);
+  }
+  function blendHex(hexA, hexB, t){
+    const a = hexToRgb(hexA), b = hexToRgb(hexB);
+    return rgbToHex(a.r+(b.r-a.r)*t, a.g+(b.g-a.g)*t, a.b+(b.b-a.b)*t);
+  }
+  function hexToRgba(hex, alpha){
+    const { r, g, b } = hexToRgb(hex);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+  function deriveTheme(base){
+    return {
+      bg: base.bg, bgAlt: base.bgAlt, gold: base.gold, burgundy: base.burgundy, cream: base.cream,
+      card: blendHex(base.bgAlt, base.cream, 0.03),
+      goldLight: blendHex(base.gold, '#ffffff', 0.25),
+      muted: blendHex(base.cream, base.bg, 0.55),
+      line: hexToRgba(base.gold, 0.2)
+    };
+  }
+  function applyTheme(base){
+    const t = deriveTheme(base || THEMES.dorado);
+    const root = document.documentElement.style;
+    root.setProperty('--bg', t.bg);
+    root.setProperty('--bg-alt', t.bgAlt);
+    root.setProperty('--card', t.card);
+    root.setProperty('--gold', t.gold);
+    root.setProperty('--gold-light', t.goldLight);
+    root.setProperty('--burgundy', t.burgundy);
+    root.setProperty('--cream', t.cream);
+    root.setProperty('--muted', t.muted);
+    root.setProperty('--line', t.line);
+  }
+ 
   const DEFAULT_CONTENT = {
     shopName: 'La Navaja Dorada',
+    theme: { bg:'#100d0a', bgAlt:'#181310', gold:'#c9a15a', burgundy:'#7a2f3d', cream:'#ede7dd' },
     pageTitle: 'La Navaja Dorada — Barbería',
     pageDescription: 'Reserva tu cita en La Navaja Dorada. Cortes clásicos, fade de precisión y arreglo de barba con navaja.',
     heroTitle: 'Cada corte se afila\ncon el mismo cuidado.',
@@ -581,6 +642,7 @@
   }
  
   function renderContent(){
+    applyTheme(content.theme);
     document.getElementById('navLogo').innerHTML = content.shopName.replace(/(\w+)$/, '<span>$1</span>');
     document.title = content.pageTitle || content.shopName;
     const descTag = document.getElementById('pageDescTag');
@@ -867,6 +929,16 @@
   function renderTabContenido(){
     const el = document.getElementById('tabContenido');
     el.innerHTML = `
+      <fieldset><legend>Apariencia</legend>
+        <div class="field">
+          <label>Paquetes rápidos</label>
+          <div class="theme-swatches" id="themeSwatches"></div>
+        </div>
+        <div class="field">
+          <label>O ajusta los colores tú mismo</label>
+          <div class="color-pickers" id="colorPickers"></div>
+        </div>
+      </fieldset>
       <fieldset><legend>Negocio</legend>
         <div class="field"><label>Nombre del negocio</label><input id="edShopName" value="${content.shopName}"></div>
         <div class="field"><label>Título de la pestaña del navegador (SEO)</label><input id="edPageTitle" value="${content.pageTitle || ''}" placeholder="Ej. La Navaja Dorada — Barbería"></div>
@@ -964,6 +1036,53 @@
         msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
       }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
     });
+ 
+    function renderThemeSwatches(){
+      const wrap = document.getElementById('themeSwatches');
+      wrap.innerHTML = '';
+      Object.keys(THEMES).forEach(key => {
+        const t = THEMES[key];
+        const isActive = content.theme.bg === t.bg && content.theme.gold === t.gold && content.theme.cream === t.cream;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'theme-swatch' + (isActive ? ' active' : '');
+        btn.innerHTML = `<span class="dot" style="background:linear-gradient(135deg, ${t.gold}, ${t.bg})"></span><span>${t.label}</span>`;
+        btn.addEventListener('click', () => {
+          content.theme = { ...t };
+          applyTheme(content.theme);
+          renderThemeSwatches();
+          renderColorPickers();
+        });
+        wrap.appendChild(btn);
+      });
+    }
+    renderThemeSwatches();
+ 
+    const COLOR_FIELDS = [
+      { key:'bg', label:'Fondo' },
+      { key:'bgAlt', label:'Fondo cajas' },
+      { key:'gold', label:'Color principal' },
+      { key:'burgundy', label:'Color secundario' },
+      { key:'cream', label:'Texto' }
+    ];
+    function renderColorPickers(){
+      const wrap = document.getElementById('colorPickers');
+      wrap.innerHTML = '';
+      COLOR_FIELDS.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'color-picker-item';
+        item.innerHTML = `<input type="color" value="${content.theme[f.key]}" data-field="${f.key}"><span>${f.label}</span>`;
+        wrap.appendChild(item);
+      });
+      wrap.querySelectorAll('input[type="color"]').forEach(inp => {
+        inp.addEventListener('input', () => {
+          content.theme[inp.dataset.field] = inp.value;
+          applyTheme(content.theme);
+          renderThemeSwatches();
+        });
+      });
+    }
+    renderColorPickers();
  
     function renderSvcRows(){
       const wrap = document.getElementById('svcEditor');

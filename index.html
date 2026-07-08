@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitleTag">La Navaja Dorada — Barbería</title>
 <meta id="pageDescTag" name="description" content="Reserva tu cita en La Navaja Dorada. Cortes clásicos, fade de precisión y arreglo de barba con navaja.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c9a15a">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Navaja Dorada">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,10 +28,10 @@
   h1,h2,h3{font-family:'Fraunces', serif; font-weight:600;}
   .mono{font-family:'JetBrains Mono', monospace;}
   a{color:inherit;} button{font-family:inherit;}
- 
+
   .stripe{height:9px; background:repeating-linear-gradient(-45deg, var(--burgundy) 0 14px, var(--cream) 14px 28px, var(--gold) 28px 42px); opacity:.9;}
   .stripe.thin{height:4px;}
- 
+
   header{position:sticky; top:0; z-index:100; background:transparent; backdrop-filter:none; border-bottom:1px solid transparent; transition:background .3s, border-color .3s, backdrop-filter .3s;}
   header.scrolled{background:rgba(16,13,10,.9); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
   nav{max-width:1100px; margin:0 auto; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:nowrap;}
@@ -43,7 +51,7 @@
   .btn-sm{padding:7px 12px; font-size:.78rem;}
   .btn-danger{background:transparent; border-color:rgba(224,138,138,.4); color:#e08a8a;}
   .btn-danger:hover{background:rgba(224,138,138,.1); color:#e08a8a;}
- 
+
   .hero{max-width:1100px; margin:0 auto; padding:88px 24px 70px; display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; position:relative;}
   .hero.has-bg{max-width:none; margin:0; padding:140px 24px 100px; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-repeat:no-repeat;}
   .hero.has-bg::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,13,10,.55), rgba(16,13,10,.85) 70%, var(--bg) 100%); z-index:0;}
@@ -68,19 +76,19 @@
   .barber-pole .tube::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.1) 18%, rgba(255,255,255,.35) 42%, rgba(255,255,255,.05) 55%, rgba(0,0,0,.15) 78%, rgba(0,0,0,.55) 100%); pointer-events:none;}
   @keyframes spin{from{background-position:0 0;} to{background-position:0 156px;}}
   @media (prefers-reduced-motion: reduce){ .barber-pole .pole-stripes{animation:none;} }
- 
+
   section{max-width:1100px; margin:0 auto; padding:70px 24px;}
   .section-head{margin-bottom:40px;}
   .section-head p{color:var(--muted); margin-top:10px; max-width:56ch;}
   .section-head h2{font-size:clamp(1.7rem,3vw,2.2rem);}
- 
+
   .services{border:1px solid var(--line);}
   .service-row{display:flex; justify-content:space-between; align-items:baseline; padding:20px 24px; border-bottom:1px solid var(--line); transition:background .2s;}
   .service-row:hover{background:rgba(201,161,90,.05);}
   .service-row:last-child{border-bottom:none;}
   .service-row .desc{color:var(--muted); font-size:.85rem; margin-top:4px;}
   .service-row .price{font-family:'JetBrains Mono', monospace; color:var(--gold-light); font-size:1.05rem; white-space:nowrap; margin-left:16px;}
- 
+
   .barber-feature{display:grid; grid-template-columns:.7fr 1.3fr; gap:36px; align-items:center; border:1px solid var(--line); padding:32px;}
   .barber-avatar{aspect-ratio:1; border-radius:6px; background:linear-gradient(160deg,#2a2117,#14120f); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:2.6rem; color:var(--gold); overflow:hidden;}
   .barber-avatar img{width:100%; height:100%; object-fit:cover; display:block;}
@@ -89,7 +97,7 @@
   .barber-feature .bio{color:var(--muted); margin-bottom:16px;}
   .stars{color:var(--gold);}
   @media (max-width:700px){ .barber-feature{grid-template-columns:1fr;} }
- 
+
   .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
   .gallery-tile{aspect-ratio:1; border:1px solid var(--line); position:relative; display:flex; align-items:flex-end; padding:14px; background:linear-gradient(160deg, var(--tile-a,#241f18), var(--tile-b,#171310)); overflow:hidden;}
   .gallery-tile::before{content:''; position:absolute; inset:0; opacity:.5; background:radial-gradient(circle at 70% 20%, rgba(201,161,90,.25), transparent 60%);}
@@ -105,7 +113,7 @@
   .avatar-upload{display:flex; align-items:center; gap:14px; margin-top:8px;}
   .avatar-upload .thumb-lg{width:64px; height:64px; border-radius:6px; object-fit:cover; border:1px solid var(--line); background:var(--bg-alt);}
   @media (max-width:720px){ .gallery{grid-template-columns:repeat(2,1fr);} }
- 
+
   .reviews-wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start;}
   .review-list{display:flex; flex-direction:column; gap:14px; max-height:460px; overflow-y:auto; padding-right:6px;}
   .review-card{border:1px solid var(--line); background:var(--card); padding:18px;}
@@ -114,7 +122,7 @@
   .review-card .rd{color:var(--muted); font-size:.72rem; margin-top:8px;}
   .star-picker{display:flex; gap:6px; font-size:1.4rem; color:#3a332a; cursor:pointer;}
   .star-picker i.active{color:var(--gold);}
- 
+
   .booking-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:40px; align-items:start;}
   form{display:grid; gap:18px;}
   .field label{display:block; font-size:.82rem; color:var(--muted); margin-bottom:7px;}
@@ -129,7 +137,7 @@
   .slot.disabled{opacity:.3; cursor:not-allowed; text-decoration:line-through;}
   .msg{font-size:.85rem; margin-top:6px; min-height:18px;}
   .msg.error{color:#e08a8a;} .msg.ok{color:#9fd0a0;}
- 
+
   .ticket{border:1px dashed var(--gold); background:var(--card); padding:26px 22px; position:relative;}
   .ticket::before, .ticket::after{content:''; position:absolute; width:18px; height:18px; background:var(--bg); border-radius:50%; top:50%; transform:translateY(-50%);}
   .ticket::before{left:-10px;} .ticket::after{right:-10px;}
@@ -137,7 +145,7 @@
   .ticket .line{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dotted var(--line); font-size:.88rem;}
   .ticket .line span:first-child{color:var(--muted);}
   .ticket .stub-empty{color:var(--muted); font-size:.9rem;}
- 
+
   .contact-wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
   .info-line{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line);}
   .info-line .k{width:110px; color:var(--muted); font-size:.85rem;}
@@ -151,35 +159,35 @@
   .social-cta{display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;}
   .social-cta a{display:flex; align-items:center; gap:9px; padding:11px 16px; border:1px solid var(--line); text-decoration:none; font-size:.86rem; transition:.2s;}
   .social-cta a:hover{border-color:var(--gold); color:var(--gold-light);}
- 
+
   footer{border-top:1px solid var(--line); padding:30px 24px 210px; text-align:center; color:var(--muted); font-size:.85rem;}
   footer a{color:var(--muted); text-decoration:underline; cursor:pointer;}
   footer a:hover{color:var(--gold-light);}
- 
+
   .wa-float{position:fixed; bottom:24px; right:24px; z-index:200; width:56px; height:56px; border-radius:50%; background:#25D366; color:#0b1a10; display:flex; align-items:center; justify-content:center; font-size:1.4rem; text-decoration:none; box-shadow:0 8px 24px rgba(37,211,102,.35);}
- 
+
   .float-btn{position:fixed; right:24px; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; text-decoration:none; z-index:200; transition:transform .2s, box-shadow .2s;}
   .float-btn:hover{transform:scale(1.09);}
   .float-wa{bottom:24px; background:#25D366; color:#0b1a10; box-shadow:0 8px 22px rgba(37,211,102,.35);}
   .float-ig{bottom:86px; background:radial-gradient(circle at 30% 110%, #ffdb56 0%, #ee2a7b 55%, #6228d7 100%); color:#fff; box-shadow:0 8px 22px rgba(238,42,123,.3);}
   .float-fb{bottom:148px; background:#1877F2; color:#fff; box-shadow:0 8px 22px rgba(24,119,242,.3);}
- 
+
   .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
   .reveal.visible{opacity:1; transform:translateY(0);}
   @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
- 
+
   .lightbox-overlay{position:fixed; inset:0; background:rgba(6,4,2,.9); z-index:400; display:none; align-items:center; justify-content:center; padding:30px; cursor:zoom-out;}
   .lightbox-overlay.open{display:flex;}
   .lightbox-overlay img{max-width:90vw; max-height:78vh; border:1px solid var(--line); object-fit:contain;}
   .lightbox-overlay .lb-caption{position:absolute; bottom:36px; left:0; right:0; text-align:center; color:var(--gold-light); font-family:'JetBrains Mono',monospace; font-size:.9rem;}
   .lightbox-overlay .lb-close{position:absolute; top:24px; right:28px; font-size:1.6rem; color:var(--cream); background:none; border:none; cursor:pointer;}
   .gallery-tile{cursor:zoom-in;}
- 
+
   @media (max-width:480px){
     .float-btn{width:46px; height:46px; font-size:1.15rem; right:14px;}
     .float-wa{bottom:16px;} .float-ig{bottom:70px;} .float-fb{bottom:124px;}
   }
- 
+
   /* modal / panel del dueño */
   .modal-overlay{position:fixed; inset:0; background:rgba(6,4,2,.78); backdrop-filter:blur(4px); z-index:300; display:none; align-items:center; justify-content:center; padding:20px;}
   .modal-overlay.open{display:flex;}
@@ -212,7 +220,7 @@
   .color-picker-item input[type="color"]{width:46px; height:46px; padding:0; border:1px solid var(--line); border-radius:8px; background:none; cursor:pointer;}
   .color-picker-item span{font-size:.7rem; color:var(--muted); text-align:center;}
   legend{padding:0 8px; color:var(--gold-light); font-size:.85rem;}
- 
+
   @media (max-width:860px){
     .hero{grid-template-columns:1fr;}
     .hero-visual{order:-1; width:100%; max-width:200px; height:260px; margin:0 auto;}
@@ -221,7 +229,7 @@
     .row2{grid-template-columns:1fr;}
     .svc-editor-row{grid-template-columns:1fr; }
   }
- 
+
   @media (max-width:480px){
     nav{padding:12px 14px;}
     .logo{font-size:1.05rem;}
@@ -245,7 +253,7 @@
 </style>
 </head>
 <body>
- 
+
 <header>
   <nav>
     <div class="logo" id="navLogo">La Navaja <span>Dorada</span></div>
@@ -262,12 +270,13 @@
         <a class="social-btn" id="igNavBtn" href="#" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
         <a class="social-btn" id="waNavBtn" href="#" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
       </div>
+      <button id="installAppBtn" class="btn btn-outline" style="display:none;"><i class="fa-solid fa-download"></i></button>
       <a href="#reservar" class="btn">Reservar cita</a>
     </div>
   </nav>
   <div class="stripe thin"></div>
 </header>
- 
+
 <section class="hero" id="heroSection">
   <div class="hero-inner-wrap">
     <div class="eyebrow">Barbería · atención personalizada</div>
@@ -287,9 +296,9 @@
     </div>
   </div>
 </section>
- 
+
 <div class="stripe"></div>
- 
+
 <section id="servicios">
   <div class="section-head">
     <div class="eyebrow">Lista de precios</div>
@@ -298,7 +307,7 @@
   </div>
   <div class="services" id="servicesList"><div class="loading">Cargando servicios...</div></div>
 </section>
- 
+
 <section id="barbero">
   <div class="section-head">
     <div class="eyebrow">Tu barbero</div>
@@ -314,7 +323,7 @@
     </div>
   </div>
 </section>
- 
+
 <section id="galeria">
   <div class="section-head">
     <div class="eyebrow">Trabajos recientes</div>
@@ -322,9 +331,9 @@
   </div>
   <div class="gallery" id="galleryGrid"><div class="loading">Cargando galería...</div></div>
 </section>
- 
+
 <div class="stripe"></div>
- 
+
 <section id="resenas">
   <div class="section-head">
     <div class="eyebrow">Opiniones</div>
@@ -349,7 +358,7 @@
     </div>
   </div>
 </section>
- 
+
 <section id="reservar">
   <div class="section-head">
     <div class="eyebrow">Agenda tu turno</div>
@@ -378,9 +387,9 @@
     </div>
   </div>
 </section>
- 
+
 <div class="stripe"></div>
- 
+
 <section id="contacto">
   <div class="section-head"><div class="eyebrow">Visítanos</div><h2>Contacto y ubicación</h2></div>
   <div class="contact-wrap">
@@ -398,16 +407,16 @@
     <div class="map-placeholder"><iframe id="mapFrame" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación en el mapa"></iframe></div>
   </div>
 </section>
- 
+
 <footer>
   <div class="stripe thin" style="margin-bottom:20px;"></div>
   © 2026 <span id="footerName">La Navaja Dorada</span> — Barbería. · <a id="openAdmin">Editar página</a>
 </footer>
- 
+
 <a id="fbFloatBtn" href="#" target="_blank" class="float-btn float-fb" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
 <a id="igFloatBtn" href="#" target="_blank" class="float-btn float-ig" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
 <a id="waFloatBtn" href="#" target="_blank" class="float-btn float-wa" aria-label="Escribir por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
- 
+
 <!-- Modal panel del dueño -->
 <div class="modal-overlay" id="adminOverlay">
   <div class="modal">
@@ -430,24 +439,24 @@
     </div>
   </div>
 </div>
- 
+
 <div class="lightbox-overlay" id="lightboxOverlay">
   <button class="lb-close" id="lightboxClose"><i class="fa-solid fa-xmark"></i></button>
   <img id="lightboxImg" src="" alt="">
   <div class="lb-caption" id="lightboxCaption"></div>
 </div>
- 
+
 <script>
   // ============ Conexión directa a Firestore (REST simple, sin el SDK en tiempo real) ============
   const FIREBASE_PROJECT_ID = "navaja-dorada-e6a0d";
   const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/default/documents/site_data`;
- 
+
   function fetchWithTimeout(url, options, ms){
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), ms);
     return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
   }
- 
+
   // ============ Almacenamiento compartido (Firestore vía REST) ============
   async function getShared(key, fallback){
     const t0 = performance.now();
@@ -481,7 +490,7 @@
       console.log(`[Firestore] guardado "${key}": ${Math.round(performance.now()-t0)}ms`);
     }catch(e){ console.error(`[Firestore] Error guardando "${key}" tras ${Math.round(performance.now()-t0)}ms`, e); throw e; }
   }
- 
+
   const THEMES = {
     dorado:  { label:'Negro y dorado',   bg:'#100d0a', bgAlt:'#181310', gold:'#c9a15a', burgundy:'#7a2f3d', cream:'#ede7dd' },
     azul:    { label:'Azul noche',       bg:'#0a0e14', bgAlt:'#111722', gold:'#4fb8e0', burgundy:'#2b4a73', cream:'#e7edf4' },
@@ -490,7 +499,7 @@
     gris:    { label:'Gris moderno',     bg:'#111214', bgAlt:'#1a1b1e', gold:'#b0b6bd', burgundy:'#4a4f57', cream:'#eceef0' },
     claro:   { label:'Claro/beige',      bg:'#f5efe6', bgAlt:'#ece3d3', gold:'#a67c3d', burgundy:'#7a2f3d', cream:'#2a2118' }
   };
- 
+
   // Utilidades de color: a partir de 5 colores base, calcula el resto de la paleta automáticamente
   function hexToRgb(hex){
     hex = (hex || '#000000').replace('#','');
@@ -532,7 +541,7 @@
     root.setProperty('--muted', t.muted);
     root.setProperty('--line', t.line);
   }
- 
+
   const DEFAULT_CONTENT = {
     shopName: 'La Navaja Dorada',
     theme: { bg:'#100d0a', bgAlt:'#181310', gold:'#c9a15a', burgundy:'#7a2f3d', cream:'#ede7dd' },
@@ -572,7 +581,7 @@
       {caption:'Barba + bigote', image:null}
     ]
   };
- 
+
   // Reduce y comprime una imagen antes de guardarla (las fotos se guardan como texto base64)
   function resizeImageFile(file, maxWidth=760, quality=0.72){
     return new Promise((resolve, reject) => {
@@ -595,10 +604,10 @@
       reader.readAsDataURL(file);
     });
   }
- 
+
   let content = null;
   let mediaDirty = false;
- 
+
   function mergeContent(textPart, mediaPart){
     const t = textPart || {};
     const m = mediaPart || {};
@@ -613,7 +622,7 @@
       heroBackground: (m.heroBackground !== undefined ? m.heroBackground : t.heroBackground) || null
     };
   }
- 
+
   async function loadContent(){
     const [textPart, mediaPart] = await Promise.all([
       getShared('siteContent', null),
@@ -621,7 +630,7 @@
     ]);
     return mergeContent(textPart, mediaPart);
   }
- 
+
   async function saveContent(c){
     const textPart = { ...c, gallery: c.gallery.map(g => ({ caption: g.caption })) };
     delete textPart.barberPhoto;
@@ -636,11 +645,11 @@
   }
   let contentReadyResolve;
   const contentReady = new Promise(res => { contentReadyResolve = res; });
- 
+
   function initials(name){
     return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
   }
- 
+
   function renderContent(){
     applyTheme(content.theme);
     document.getElementById('navLogo').innerHTML = content.shopName.replace(/(\w+)$/, '<span>$1</span>');
@@ -649,7 +658,7 @@
     if(descTag) descTag.setAttribute('content', content.pageDescription || '');
     document.getElementById('heroTitle').innerHTML = content.heroTitle.replace(/\n/g,'<br>');
     document.getElementById('heroSubtitle').textContent = content.heroSubtitle;
- 
+
     const heroSection = document.getElementById('heroSection');
     if(content.heroBackground){
       heroSection.classList.add('has-bg');
@@ -661,12 +670,12 @@
     document.getElementById('barberName').textContent = content.barberName;
     document.getElementById('barberSpecialty').textContent = content.barberSpecialty;
     document.getElementById('barberBio').textContent = content.barberBio;
- 
+
     const barberAvatar = document.getElementById('barberAvatar');
     barberAvatar.innerHTML = content.barberPhoto
       ? `<img src="${content.barberPhoto}" alt="Foto de ${content.barberName}">`
       : `<span id="barberInitials">${initials(content.barberName)}</span>`;
- 
+
     document.getElementById('cAddress').textContent = content.address;
     document.getElementById('cPhone').textContent = content.phone;
     document.getElementById('cPhoneLink').href = 'tel:' + content.phone.replace(/[^\d+]/g,'');
@@ -674,7 +683,7 @@
     document.getElementById('cHours').textContent = content.hours;
     document.getElementById('cEmail').textContent = content.email;
     document.getElementById('footerName').textContent = content.shopName;
- 
+
     const waMessage = encodeURIComponent((content.waMessage || DEFAULT_CONTENT.waMessage).replace('{shop}', content.shopName));
     const waLink = 'https://wa.me/' + content.whatsapp.replace(/\D/g,'') + '?text=' + waMessage;
     ['waHeroBtn','waNavBtn','waContactBtn','waFloatBtn'].forEach(id => document.getElementById(id).href = waLink);
@@ -686,7 +695,7 @@
     document.getElementById('igContactBtn').href = igLink;
     document.getElementById('fbFloatBtn').href = fbLink;
     document.getElementById('igFloatBtn').href = igLink;
- 
+
     const servicesList = document.getElementById('servicesList');
     servicesList.innerHTML = '';
     content.services.forEach(s => {
@@ -695,10 +704,10 @@
       row.innerHTML = `<div><div class="name">${s.name}</div><div class="desc">${s.desc}</div></div><div class="price">$${s.price}</div>`;
       servicesList.appendChild(row);
     });
- 
+
     const serviceSelect = document.getElementById('service');
     serviceSelect.innerHTML = '<option value="">Selecciona...</option>' + content.services.map(s => `<option value="${s.name}">${s.name} — $${s.price}</option>`).join('');
- 
+
     const galleryGrid = document.getElementById('galleryGrid');
     galleryGrid.innerHTML = '';
     const tilePairs = [['#2a2117','#171310'],['#241f22','#14120f'],['#22201a','#171310'],['#251c1c','#14120f'],['#1f231d','#14120f'],['#241f18','#171310'],['#221c22','#14120f'],['#231f1a','#171310']];
@@ -715,7 +724,7 @@
       galleryGrid.appendChild(tile);
     });
   }
- 
+
   // ============ Reservas ============
   // Horarios generados automáticamente: de 10:00 a 21:00 (9pm), citas de 45 minutos cada una
   function generateSlots(startHour, endHour, durationMin){
@@ -735,24 +744,24 @@
   let bookingsCache = [];
   const dateInput = document.getElementById('date');
   dateInput.min = new Date().toISOString().split('T')[0];
- 
+
   async function loadBookings(){ bookingsCache = await getShared('bookings', []); }
- 
+
   function getServiceSlots(serviceName){
     const svc = content.services.find(s => s.name === serviceName);
     return (svc && svc.slots) || 1;
   }
- 
+
   function occupiedTimesOf(b){
     const idx = allSlots.indexOf(b.time);
     if(idx === -1) return [b.time];
     return allSlots.slice(idx, idx + (b.slotsUsed || 1));
   }
- 
+
   function isTimeOccupied(chosenDate, time){
     return bookingsCache.some(b => b.date === chosenDate && b.status !== 'cancelada' && occupiedTimesOf(b).includes(time));
   }
- 
+
   function hasRoomFrom(chosenDate, startIdx, needed){
     if(startIdx + needed > allSlots.length) return false;
     for(let i = startIdx; i < startIdx + needed; i++){
@@ -760,7 +769,7 @@
     }
     return true;
   }
- 
+
   function renderSlots(){
     const slotsEl = document.getElementById('slots');
     const slotMsg = document.getElementById('slotMsg');
@@ -768,23 +777,23 @@
     slotMsg.className = 'msg';
     slotMsg.textContent = '';
     const chosenDate = dateInput.value;
- 
+
     if(!chosenDate){
       slotsEl.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Elige una fecha para ver los horarios.</div>';
       return;
     }
- 
+
     const needed = getServiceSlots(document.getElementById('service').value);
     const isTaken = (time) => isTimeOccupied(chosenDate, time);
     const diaLleno = allSlots.every(isTaken);
- 
+
     if(diaLleno){
       slotsEl.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Este día ya está lleno. Por favor elige otra fecha.</div>';
       slotMsg.className = 'msg error';
       slotMsg.textContent = 'No hay horarios disponibles para este día.';
       return;
     }
- 
+
     allSlots.forEach((time, idx) => {
       const taken = !hasRoomFrom(chosenDate, idx, needed);
       const el = document.createElement('div');
@@ -793,7 +802,7 @@
       if(!taken){ el.addEventListener('click', () => { selectedSlot = time; renderSlots(); }); }
       slotsEl.appendChild(el);
     });
- 
+
     if(needed > 1){
       slotMsg.className = 'msg';
       slotMsg.textContent = `Este servicio ocupa ${needed} turnos (${needed*45} min).`;
@@ -801,12 +810,12 @@
   }
   dateInput.addEventListener('change', () => { selectedSlot = null; renderSlots(); });
   document.getElementById('service').addEventListener('change', () => { selectedSlot = null; renderSlots(); });
- 
+
   function buildConfirmationWaLink(name, phone, service, date, time){
     const msg = `✨ *Nueva cita confirmada — ${content.shopName}* ✨\n\n👤 Cliente: ${name}\n📞 Teléfono: ${phone}\n💈 Servicio: ${service}\n📅 Fecha: ${date}\n🕒 Hora: ${time}\n\n¡Gracias por reservar, nos vemos pronto! 🙌`;
     return 'https://wa.me/' + content.whatsapp.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
   }
- 
+
   document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
@@ -818,19 +827,19 @@
     slotMsg.textContent = ''; formMsg.textContent = '';
     if(!date){ formMsg.className='msg error'; formMsg.textContent='Elige una fecha.'; return; }
     if(!selectedSlot){ slotMsg.className='msg error'; slotMsg.textContent='Elige un horario disponible.'; return; }
- 
+
     await loadBookings();
     const needed = getServiceSlots(service);
     const startIdx = allSlots.indexOf(selectedSlot);
     const stillFree = hasRoomFrom(date, startIdx, needed);
     if(!stillFree){ slotMsg.className='msg error'; slotMsg.textContent='Ese horario ya no tiene suficiente espacio para este servicio, elige otro.'; renderSlots(); return; }
- 
+
     const newBooking = { id: Date.now().toString(36), name, phone, service, barber: content.barberName, date, time: selectedSlot, slotsUsed: needed, status: 'pendiente' };
     bookingsCache.push(newBooking);
     await setShared('bookings', bookingsCache);
- 
+
     const waLinkConfirm = buildConfirmationWaLink(name, phone, service, date, selectedSlot);
- 
+
     document.getElementById('ticketBody').innerHTML = `
       <p>¡Listo, ${name}! Tu cita quedó registrada para el <strong class="mono">${date}</strong> a las <strong class="mono">${selectedSlot}</strong>. En breve te confirmamos.</p>
       <a href="${waLinkConfirm}" target="_blank" class="btn btn-wa" style="width:100%; justify-content:center; margin-top:16px;">
@@ -838,11 +847,11 @@
       </a>`;
     formMsg.className='msg ok'; formMsg.textContent = '¡Solicitud enviada! Te esperamos.';
     e.target.reset(); selectedSlot = null; renderSlots();
- 
+
     // Abre WhatsApp automáticamente con el mensaje ya listo, justo al generarse la confirmación
     window.open(waLinkConfirm, '_blank');
   });
- 
+
   // ============ Reseñas ============
   let selectedStars = 5;
   const starPicker = document.getElementById('starPicker');
@@ -850,7 +859,7 @@
   starPicker.addEventListener('click', (e) => { if(e.target.dataset.v){ selectedStars = parseInt(e.target.dataset.v); paintStars(); } });
   paintStars();
   function starString(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
- 
+
   let reviewsCache = [];
   async function renderReviews(){
     reviewsCache = await getShared('reviews', [
@@ -870,7 +879,7 @@
     document.getElementById('ratingText').textContent = `${avg} de 5 · ${reviewsCache.length} reseñas`;
     document.getElementById('barberRatingText').textContent = `${avg} · ${reviewsCache.length} reseñas`;
   }
- 
+
   document.getElementById('reviewForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('rName').value.trim();
@@ -882,14 +891,14 @@
     e.target.reset(); selectedStars = 5; paintStars();
     await renderReviews();
   });
- 
+
   // ============ Panel del dueño (contraseña solo del lado del cliente, demo) ============
   const ADMIN_PASS = 'barberia2026';
   const adminOverlay = document.getElementById('adminOverlay');
   document.getElementById('openAdmin').addEventListener('click', () => adminOverlay.classList.add('open'));
   document.getElementById('closeAdmin').addEventListener('click', () => adminOverlay.classList.remove('open'));
   adminOverlay.addEventListener('click', (e) => { if(e.target === adminOverlay) adminOverlay.classList.remove('open'); });
- 
+
   document.getElementById('adminLoginBtn').addEventListener('click', async () => {
     const pass = document.getElementById('adminPass').value;
     const msg = document.getElementById('adminLoginMsg');
@@ -915,7 +924,7 @@
         `<div class="empty-note" style="color:#e08a8a;">Ocurrió un error al cargar el panel: ${err && err.message ? err.message : err}</div>`;
     }
   });
- 
+
   document.querySelectorAll('.admin-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -925,7 +934,7 @@
       el.style.display = 'block';
     });
   });
- 
+
   function renderTabContenido(){
     const el = document.getElementById('tabContenido');
     el.innerHTML = `
@@ -999,7 +1008,7 @@
       </fieldset>
       <button class="btn" id="saveContentBtn">Guardar cambios</button>
       <div class="msg" id="saveContentMsg"></div>`;
- 
+
     document.getElementById('heroBgInput').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if(!file) return;
@@ -1036,7 +1045,7 @@
         msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
       }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
     });
- 
+
     function renderThemeSwatches(){
       const wrap = document.getElementById('themeSwatches');
       wrap.innerHTML = '';
@@ -1057,7 +1066,7 @@
       });
     }
     renderThemeSwatches();
- 
+
     const COLOR_FIELDS = [
       { key:'bg', label:'Fondo' },
       { key:'bgAlt', label:'Fondo cajas' },
@@ -1083,7 +1092,7 @@
       });
     }
     renderColorPickers();
- 
+
     function renderSvcRows(){
       const wrap = document.getElementById('svcEditor');
       wrap.innerHTML = '';
@@ -1112,7 +1121,7 @@
     document.getElementById('addSvcBtn').addEventListener('click', () => {
       content.services.push({name:'Nuevo servicio', desc:'', price:0, slots:1}); renderSvcRows();
     });
- 
+
     function renderGalRows(){
       const wrap = document.getElementById('galEditor');
       wrap.innerHTML = '';
@@ -1155,7 +1164,7 @@
     document.getElementById('addGalBtn').addEventListener('click', () => {
       content.gallery.push({caption:'Nueva foto', image:null}); mediaDirty = true; renderGalRows();
     });
- 
+
     document.getElementById('saveContentBtn').addEventListener('click', async () => {
       content.shopName = document.getElementById('edShopName').value;
       content.pageTitle = document.getElementById('edPageTitle').value;
@@ -1187,7 +1196,7 @@
       }
     });
   }
- 
+
   function renderTabCitas(){
     const el = document.getElementById('tabCitas');
     if(!bookingsCache.length){ el.innerHTML = '<div class="empty-note">Aún no hay citas reservadas.</div>'; return; }
@@ -1232,7 +1241,7 @@
       });
     });
   }
- 
+
   function renderTabResenas(){
     const el = document.getElementById('tabResenas');
     if(!reviewsCache.length){ el.innerHTML = '<div class="empty-note">Aún no hay reseñas.</div>'; return; }
@@ -1254,7 +1263,7 @@
       });
     });
   }
- 
+
   // ============ Lightbox de galería ============
   const lightboxOverlay = document.getElementById('lightboxOverlay');
   function openLightbox(src, caption){
@@ -1265,7 +1274,7 @@
   function closeLightbox(){ lightboxOverlay.classList.remove('open'); }
   lightboxOverlay.addEventListener('click', closeLightbox);
   document.getElementById('lightboxClose').addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
- 
+
   // ============ Animación de aparición al hacer scroll ============
   function initReveal(){
     const targets = document.querySelectorAll('section > .section-head, section > .services, section > .barber-feature, section > .gallery, section > .reviews-wrap, section > .booking-wrap, section > .contact-wrap');
@@ -1275,12 +1284,32 @@
     }, { threshold: 0.12 });
     targets.forEach(t => io.observe(t));
   }
- 
+
   // ============ Header transparente que se vuelve sólido al hacer scroll ============
   const headerEl = document.querySelector('header');
   function updateHeaderScroll(){ headerEl.classList.toggle('scrolled', window.scrollY > 40); }
   window.addEventListener('scroll', updateHeaderScroll);
- 
+
+  // ============ Instalar como app (PWA) ============
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch((e) => console.warn('No se pudo registrar el service worker', e));
+    });
+  }
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const btn = document.getElementById('installAppBtn');
+    if(btn) btn.style.display = 'inline-flex';
+  });
+  document.addEventListener('click', (e) => {
+    if(e.target && e.target.id === 'installAppBtn' && deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.finally(() => { deferredInstallPrompt = null; });
+    }
+  });
+
   // ============ Inicialización ============
   (async () => {
     content = await loadContent();
@@ -1293,6 +1322,7 @@
     updateHeaderScroll();
   })();
 </script>
- 
+
 </body>
 </html>
+

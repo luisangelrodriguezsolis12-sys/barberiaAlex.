@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitleTag">La Navaja Dorada — Barbería</title>
+<meta id="pageDescTag" name="description" content="Reserva tu cita en La Navaja Dorada. Cortes clásicos, fade de precisión y arreglo de barba con navaja.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --bg:#100d0a; --bg-alt:#181310; --card:#1d1712;
+    --gold:#c9a15a; --gold-light:#e6c988; --burgundy:#7a2f3d;
+    --cream:#ede7dd; --muted:#8f8879; --line:rgba(201,161,90,.2);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--cream); font-family:'Work Sans', sans-serif; line-height:1.5;}
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;} button{font-family:inherit;}
+ 
+  .stripe{height:9px; background:repeating-linear-gradient(-45deg, var(--burgundy) 0 14px, var(--cream) 14px 28px, var(--gold) 28px 42px); opacity:.9;}
+  .stripe.thin{height:4px;}
+ 
+  header{position:sticky; top:0; z-index:100; background:transparent; backdrop-filter:none; border-bottom:1px solid transparent; transition:background .3s, border-color .3s, backdrop-filter .3s;}
+  header.scrolled{background:rgba(16,13,10,.9); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  nav{max-width:1100px; margin:0 auto; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:nowrap;}
+  .logo{font-size:1.3rem; white-space:nowrap;} .logo span{color:var(--gold);}
+  .navlinks{display:flex; gap:26px; font-size:.9rem;}
+  .navlinks a{text-decoration:none; color:var(--muted); transition:color .2s;}
+  .navlinks a:hover{color:var(--gold-light);}
+  .social-row{display:flex; gap:8px; margin-right:10px; flex-shrink:0;}
+  .social-btn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--line); border-radius:6px; color:var(--muted); text-decoration:none; transition:.2s; flex-shrink:0;}
+  .social-btn:hover{background:var(--gold); color:var(--bg); border-color:var(--gold);}
+  .nav-right{display:flex; align-items:center; flex-shrink:0;}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:2px; background:var(--gold); color:var(--bg); font-weight:600; text-decoration:none; font-size:.9rem; border:1px solid var(--gold); cursor:pointer; transition:.2s;}
+  .btn:hover{background:transparent; color:var(--gold-light);}
+  .btn-outline{background:transparent; color:var(--cream); border:1px solid var(--line);}
+  .btn-outline:hover{border-color:var(--gold); color:var(--gold-light);}
+  .btn-wa{background:#25D366; border-color:#25D366; color:#0b1a10;}
+  .btn-sm{padding:7px 12px; font-size:.78rem;}
+  .btn-danger{background:transparent; border-color:rgba(224,138,138,.4); color:#e08a8a;}
+  .btn-danger:hover{background:rgba(224,138,138,.1); color:#e08a8a;}
+ 
+  .hero{max-width:1100px; margin:0 auto; padding:88px 24px 70px; display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; position:relative;}
+  .hero.has-bg{max-width:none; margin:0; padding:140px 24px 100px; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-repeat:no-repeat;}
+  .hero.has-bg::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,13,10,.55), rgba(16,13,10,.85) 70%, var(--bg) 100%); z-index:0;}
+  .hero.has-bg .hero-inner-wrap{position:relative; z-index:1; max-width:1100px; width:100%; margin:0 auto; text-align:center;}
+  .hero.has-bg .hero p{margin-left:auto; margin-right:auto;}
+  .hero.has-bg .hero-actions{justify-content:center;}
+  .hero.has-bg .rating-line{justify-content:center; display:flex;}
+  .hero.has-bg .hero-visual{display:none;}
+  .eyebrow{font-family:'JetBrains Mono', monospace; font-size:.78rem; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:14px;}
+  .hero h1{font-size:clamp(2.2rem,4.5vw,3.3rem); line-height:1.1; margin-bottom:20px; text-shadow:0 0 40px rgba(201,161,90,.18);}
+  .hero p{color:var(--muted); max-width:44ch; margin-bottom:28px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .rating-line{margin-top:22px; font-size:.88rem; color:var(--muted);}
+  .rating-line .stars{color:var(--gold);}
+  .hero-visual{position:relative; aspect-ratio:.85; border:1px solid var(--line); background:radial-gradient(circle at 30% 20%, rgba(201,161,90,.14), transparent 55%), linear-gradient(160deg, #201a13, #100d0a); display:flex; align-items:center; justify-content:center;}
+  .barber-pole{display:flex; flex-direction:column; align-items:center; height:80%;}
+  .barber-pole .cap{width:30px; height:16px; background:linear-gradient(90deg,#0a0a0a,#2b2b2b 45%,#0a0a0a); border-radius:6px 6px 2px 2px; box-shadow:0 3px 6px rgba(0,0,0,.5);}
+  .barber-pole .cap-top{border-radius:14px 14px 4px 4px;}
+  .barber-pole .cap-top::before{content:''; display:block; width:8px; height:8px; background:#0a0a0a; border-radius:50%; margin:-8px auto 0;}
+  .barber-pole .tube{position:relative; width:34px; flex:1; border-radius:6px; overflow:hidden; box-shadow:0 20px 45px rgba(0,0,0,.55);}
+  .barber-pole .pole-stripes{position:absolute; inset:0; background:repeating-linear-gradient(-45deg, var(--burgundy) 0 13px, var(--cream) 13px 26px, var(--gold) 26px 39px); animation:spin 5s linear infinite;}
+  .barber-pole .tube::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.1) 18%, rgba(255,255,255,.35) 42%, rgba(255,255,255,.05) 55%, rgba(0,0,0,.15) 78%, rgba(0,0,0,.55) 100%); pointer-events:none;}
+  @keyframes spin{from{background-position:0 0;} to{background-position:0 156px;}}
+  @media (prefers-reduced-motion: reduce){ .barber-pole .pole-stripes{animation:none;} }
+ 
+  section{max-width:1100px; margin:0 auto; padding:70px 24px;}
+  .section-head{margin-bottom:40px;}
+  .section-head p{color:var(--muted); margin-top:10px; max-width:56ch;}
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.2rem);}
+ 
+  .services{border:1px solid var(--line);}
+  .service-row{display:flex; justify-content:space-between; align-items:baseline; padding:20px 24px; border-bottom:1px solid var(--line); transition:background .2s;}
+  .service-row:hover{background:rgba(201,161,90,.05);}
+  .service-row:last-child{border-bottom:none;}
+  .service-row .desc{color:var(--muted); font-size:.85rem; margin-top:4px;}
+  .service-row .price{font-family:'JetBrains Mono', monospace; color:var(--gold-light); font-size:1.05rem; white-space:nowrap; margin-left:16px;}
+ 
+  .barber-feature{display:grid; grid-template-columns:.7fr 1.3fr; gap:36px; align-items:center; border:1px solid var(--line); padding:32px;}
+  .barber-avatar{aspect-ratio:1; border-radius:6px; background:linear-gradient(160deg,#2a2117,#14120f); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:2.6rem; color:var(--gold); overflow:hidden;}
+  .barber-avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+  .barber-feature h3{font-size:1.5rem; margin-bottom:6px;}
+  .barber-feature .spec{color:var(--gold-light); font-size:.95rem; margin-bottom:14px;}
+  .barber-feature .bio{color:var(--muted); margin-bottom:16px;}
+  .stars{color:var(--gold);}
+  @media (max-width:700px){ .barber-feature{grid-template-columns:1fr;} }
+ 
+  .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .gallery-tile{aspect-ratio:1; border:1px solid var(--line); position:relative; display:flex; align-items:flex-end; padding:14px; background:linear-gradient(160deg, var(--tile-a,#241f18), var(--tile-b,#171310)); overflow:hidden;}
+  .gallery-tile::before{content:''; position:absolute; inset:0; opacity:.5; background:radial-gradient(circle at 70% 20%, rgba(201,161,90,.25), transparent 60%);}
+  .gallery-tile img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .4s ease;}
+  .gallery-tile:hover img{transform:scale(1.08);}
+  .gallery-tile span{position:relative; font-size:.82rem; color:var(--gold-light); font-family:'JetBrains Mono',monospace; z-index:1; text-shadow:0 1px 6px rgba(0,0,0,.8);}
+  .img-editor-row{display:grid; grid-template-columns:70px 1fr auto; gap:10px; align-items:center; margin-bottom:10px;}
+  .img-editor-row .thumb{width:70px; height:70px; border-radius:4px; object-fit:cover; border:1px solid var(--line); background:var(--bg-alt);}
+  .img-editor-row input[type="text"]{padding:9px 10px; font-size:.85rem;}
+  .file-btn{display:inline-flex; align-items:center; gap:6px; font-size:.75rem; padding:6px 10px; border:1px solid var(--line); color:var(--muted); cursor:pointer; margin-top:4px;}
+  .file-btn:hover{border-color:var(--gold); color:var(--gold-light);}
+  .file-btn input{display:none;}
+  .avatar-upload{display:flex; align-items:center; gap:14px; margin-top:8px;}
+  .avatar-upload .thumb-lg{width:64px; height:64px; border-radius:6px; object-fit:cover; border:1px solid var(--line); background:var(--bg-alt);}
+  @media (max-width:720px){ .gallery{grid-template-columns:repeat(2,1fr);} }
+ 
+  .reviews-wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start;}
+  .review-list{display:flex; flex-direction:column; gap:14px; max-height:460px; overflow-y:auto; padding-right:6px;}
+  .review-card{border:1px solid var(--line); background:var(--card); padding:18px;}
+  .review-card .rh{display:flex; justify-content:space-between; margin-bottom:8px;}
+  .review-card p{color:var(--muted); font-size:.87rem;}
+  .review-card .rd{color:var(--muted); font-size:.72rem; margin-top:8px;}
+  .star-picker{display:flex; gap:6px; font-size:1.4rem; color:#3a332a; cursor:pointer;}
+  .star-picker i.active{color:var(--gold);}
+ 
+  .booking-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:40px; align-items:start;}
+  form{display:grid; gap:18px;}
+  .field label{display:block; font-size:.82rem; color:var(--muted); margin-bottom:7px;}
+  .field input, .field select, .field textarea{width:100%; padding:12px 14px; background:var(--bg-alt); color:var(--cream); border:1px solid var(--line); border-radius:2px; font-family:inherit; font-size:.95rem;}
+  .field textarea{resize:vertical; min-height:80px;}
+  .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .slots{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:6px;}
+  .slot{padding:10px 0; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.85rem; border:1px solid var(--line); background:var(--bg-alt); cursor:pointer; border-radius:2px; transition:.15s;}
+  .slot:hover{border-color:var(--gold);}
+  .slot.selected{background:var(--gold); color:var(--bg); border-color:var(--gold); font-weight:600;}
+  .slot.disabled{opacity:.3; cursor:not-allowed; text-decoration:line-through;}
+  .msg{font-size:.85rem; margin-top:6px; min-height:18px;}
+  .msg.error{color:#e08a8a;} .msg.ok{color:#9fd0a0;}
+ 
+  .ticket{border:1px dashed var(--gold); background:var(--card); padding:26px 22px; position:relative;}
+  .ticket::before, .ticket::after{content:''; position:absolute; width:18px; height:18px; background:var(--bg); border-radius:50%; top:50%; transform:translateY(-50%);}
+  .ticket::before{left:-10px;} .ticket::after{right:-10px;}
+  .ticket h3{font-size:1.05rem; margin-bottom:14px; color:var(--gold-light);}
+  .ticket .line{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dotted var(--line); font-size:.88rem;}
+  .ticket .line span:first-child{color:var(--muted);}
+  .ticket .stub-empty{color:var(--muted); font-size:.9rem;}
+ 
+  .contact-wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .info-line{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .info-line .k{width:110px; color:var(--muted); font-size:.85rem;}
+  .map-placeholder{aspect-ratio:16/11; border:1px solid var(--line); background:linear-gradient(var(--line) 1px, transparent 1px) 0 0/28px 28px, linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/28px 28px, var(--bg-alt); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
+  .map-placeholder .pin{width:14px; height:14px; background:var(--gold); border-radius:50% 50% 50% 0; transform:rotate(-45deg); box-shadow:0 0 0 6px rgba(201,161,90,.15);}
+  .map-placeholder iframe{position:absolute; inset:0; width:100%; height:100%; border:0; filter:grayscale(35%) contrast(1.05);}
+  .info-line.linkable{cursor:pointer; transition:color .2s; text-decoration:none;}
+  .info-line.linkable:hover{color:var(--gold-light);}
+  .info-line.linkable .k{transition:color .2s;}
+  .info-line.linkable:hover .k{color:var(--gold-light);}
+  .social-cta{display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;}
+  .social-cta a{display:flex; align-items:center; gap:9px; padding:11px 16px; border:1px solid var(--line); text-decoration:none; font-size:.86rem; transition:.2s;}
+  .social-cta a:hover{border-color:var(--gold); color:var(--gold-light);}
+ 
+  footer{border-top:1px solid var(--line); padding:30px 24px 210px; text-align:center; color:var(--muted); font-size:.85rem;}
+  footer a{color:var(--muted); text-decoration:underline; cursor:pointer;}
+  footer a:hover{color:var(--gold-light);}
+ 
+  .wa-float{position:fixed; bottom:24px; right:24px; z-index:200; width:56px; height:56px; border-radius:50%; background:#25D366; color:#0b1a10; display:flex; align-items:center; justify-content:center; font-size:1.4rem; text-decoration:none; box-shadow:0 8px 24px rgba(37,211,102,.35);}
+ 
+  .float-btn{position:fixed; right:24px; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; text-decoration:none; z-index:200; transition:transform .2s, box-shadow .2s;}
+  .float-btn:hover{transform:scale(1.09);}
+  .float-wa{bottom:24px; background:#25D366; color:#0b1a10; box-shadow:0 8px 22px rgba(37,211,102,.35);}
+  .float-ig{bottom:86px; background:radial-gradient(circle at 30% 110%, #ffdb56 0%, #ee2a7b 55%, #6228d7 100%); color:#fff; box-shadow:0 8px 22px rgba(238,42,123,.3);}
+  .float-fb{bottom:148px; background:#1877F2; color:#fff; box-shadow:0 8px 22px rgba(24,119,242,.3);}
+ 
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+ 
+  .lightbox-overlay{position:fixed; inset:0; background:rgba(6,4,2,.9); z-index:400; display:none; align-items:center; justify-content:center; padding:30px; cursor:zoom-out;}
+  .lightbox-overlay.open{display:flex;}
+  .lightbox-overlay img{max-width:90vw; max-height:78vh; border:1px solid var(--line); object-fit:contain;}
+  .lightbox-overlay .lb-caption{position:absolute; bottom:36px; left:0; right:0; text-align:center; color:var(--gold-light); font-family:'JetBrains Mono',monospace; font-size:.9rem;}
+  .lightbox-overlay .lb-close{position:absolute; top:24px; right:28px; font-size:1.6rem; color:var(--cream); background:none; border:none; cursor:pointer;}
+  .gallery-tile{cursor:zoom-in;}
+ 
+  @media (max-width:480px){
+    .float-btn{width:46px; height:46px; font-size:1.15rem; right:14px;}
+    .float-wa{bottom:16px;} .float-ig{bottom:70px;} .float-fb{bottom:124px;}
+  }
+ 
+  /* modal / panel del dueño */
+  .modal-overlay{position:fixed; inset:0; background:rgba(6,4,2,.78); backdrop-filter:blur(4px); z-index:300; display:none; align-items:center; justify-content:center; padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card); border:1px solid var(--line); border-radius:4px; padding:28px; width:100%; max-width:680px; max-height:84vh; overflow-y:auto;}
+  .modal .mhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+  .close-btn{background:none; border:none; color:var(--muted); font-size:1.2rem; cursor:pointer;}
+  .close-btn:hover{color:var(--gold-light);}
+  .admin-tabs{display:flex; gap:10px; margin-bottom:20px; border-bottom:1px solid var(--line);}
+  .admin-tab{padding:10px 4px; color:var(--muted); cursor:pointer; font-size:.88rem; border-bottom:2px solid transparent;}
+  .admin-tab.active{color:var(--gold-light); border-color:var(--gold);}
+  .admin-row{background:var(--bg-alt); border:1px solid var(--line); padding:14px; margin-bottom:10px; font-size:.85rem;}
+  .admin-row .top-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .badge{font-size:.7rem; padding:3px 9px; border:1px solid var(--line);}
+  .badge.pendiente{color:#ffcf6b; border-color:rgba(255,207,107,.4);}
+  .badge.confirmada{color:var(--gold-light); border-color:var(--gold);}
+  .badge.completada{color:#9fd0a0; border-color:rgba(159,208,160,.4);}
+  .badge.cancelada{color:#e08a8a; border-color:rgba(224,138,138,.4);}
+  .admin-row .actions{display:flex; gap:8px; margin-top:10px;}
+  .loading, .empty-note{color:var(--muted); font-size:.85rem; text-align:center; padding:20px;}
+  .svc-editor-row{display:grid; grid-template-columns:1.1fr 1.5fr .6fr .6fr auto; gap:8px; margin-bottom:8px;}
+  .svc-editor-row input{padding:9px 10px; font-size:.85rem;}
+  fieldset{border:1px solid var(--line); padding:16px; margin-bottom:18px;}
+  legend{padding:0 8px; color:var(--gold-light); font-size:.85rem;}
+ 
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;}
+    .hero-visual{order:-1; width:100%; max-width:200px; height:260px; margin:0 auto;}
+    .booking-wrap, .contact-wrap, .reviews-wrap{grid-template-columns:1fr;}
+    .navlinks{display:none;}
+    .row2{grid-template-columns:1fr;}
+    .svc-editor-row{grid-template-columns:1fr; }
+  }
+ 
+  @media (max-width:480px){
+    nav{padding:12px 14px;}
+    .logo{font-size:1.05rem;}
+    .social-row{display:none;}
+    .btn{padding:9px 14px; font-size:.82rem;}
+    section{padding:50px 16px;}
+    .hero{padding:70px 16px 50px;}
+    .hero.has-bg{padding:110px 16px 70px; min-height:70vh;}
+    .slots{grid-template-columns:repeat(3,1fr);}
+    .services-grid, .barbers-grid{grid-template-columns:1fr;}
+    .gallery{grid-template-columns:repeat(2,1fr); gap:10px;}
+    .modal{padding:20px 16px;}
+    .admin-tabs{flex-wrap:wrap; gap:4px 14px;}
+    .img-editor-row{grid-template-columns:56px 1fr; row-gap:8px;}
+    .img-editor-row .thumb{width:56px; height:56px;}
+    .img-editor-row button{grid-column:2; justify-self:start;}
+    .hero-actions .btn{flex:1 1 auto; justify-content:center;}
+    .service-row{padding:16px;}
+    .barber-feature{padding:20px;}
+  }
+</style>
+</head>
+<body>
+ 
+<header>
+  <nav>
+    <div class="logo" id="navLogo">La Navaja <span>Dorada</span></div>
+    <div class="navlinks">
+      <a href="#servicios">Servicios</a>
+      <a href="#barbero">Barbero</a>
+      <a href="#galeria">Galería</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#reservar">Reservar</a>
+    </div>
+    <div class="nav-right">
+      <div class="social-row">
+        <a class="social-btn" id="fbNavBtn" href="#" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a class="social-btn" id="igNavBtn" href="#" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a class="social-btn" id="waNavBtn" href="#" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+      <a href="#reservar" class="btn">Reservar cita</a>
+    </div>
+  </nav>
+  <div class="stripe thin"></div>
+</header>
+ 
+<section class="hero" id="heroSection">
+  <div class="hero-inner-wrap">
+    <div class="eyebrow">Barbería · atención personalizada</div>
+    <h1 id="heroTitle">Cada corte se afila<br>con el mismo cuidado.</h1>
+    <p id="heroSubtitle">Cortes clásicos, fade de precisión y arreglo de barba con navaja. Reserva tu turno en menos de un minuto.</p>
+    <div class="hero-actions">
+      <a href="#reservar" class="btn">Reservar cita</a>
+      <a id="waHeroBtn" href="#" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+    </div>
+    <div class="rating-line" id="ratingLine"><span class="stars">★★★★★</span> <span id="ratingText">Cargando calificación...</span></div>
+  </div>
+  <div class="hero-visual">
+    <div class="barber-pole">
+      <div class="cap cap-top"></div>
+      <div class="tube"><div class="pole-stripes"></div></div>
+      <div class="cap cap-bottom"></div>
+    </div>
+  </div>
+</section>
+ 
+<div class="stripe"></div>
+ 
+<section id="servicios">
+  <div class="section-head">
+    <div class="eyebrow">Lista de precios</div>
+    <h2>Servicios</h2>
+    <p>Precios fijos, sin sorpresas.</p>
+  </div>
+  <div class="services" id="servicesList"><div class="loading">Cargando servicios...</div></div>
+</section>
+ 
+<section id="barbero">
+  <div class="section-head">
+    <div class="eyebrow">Tu barbero</div>
+    <h2>Quién te va a atender</h2>
+  </div>
+  <div class="barber-feature">
+    <div class="barber-avatar" id="barberAvatar"><span id="barberInitials">R</span></div>
+    <div>
+      <h3 id="barberName">Rubén Alvarado</h3>
+      <div class="spec" id="barberSpecialty">Fade, diseño y navaja clásica</div>
+      <div class="bio" id="barberBio">Más de 12 años de experiencia perfeccionando cortes clásicos y modernos, con especial atención al detalle en cada barba y acabado a navaja.</div>
+      <span class="stars" id="barberStars">★★★★★</span> <span class="mono" id="barberRatingText" style="color:var(--muted); font-size:.85rem;">4.9 · 128 reseñas</span>
+    </div>
+  </div>
+</section>
+ 
+<section id="galeria">
+  <div class="section-head">
+    <div class="eyebrow">Trabajos recientes</div>
+    <h2>Galería</h2>
+  </div>
+  <div class="gallery" id="galleryGrid"><div class="loading">Cargando galería...</div></div>
+</section>
+ 
+<div class="stripe"></div>
+ 
+<section id="resenas">
+  <div class="section-head">
+    <div class="eyebrow">Opiniones</div>
+    <h2>Reseñas de clientes</h2>
+    <p>Visibles para todos los visitantes de la página.</p>
+  </div>
+  <div class="reviews-wrap">
+    <div class="review-list" id="reviewList"><div class="loading">Cargando reseñas...</div></div>
+    <div class="ticket" style="border-style:solid;">
+      <h3>Deja tu reseña</h3>
+      <form id="reviewForm">
+        <div class="field"><label for="rName">Tu nombre</label><input type="text" id="rName" required placeholder="Nombre"></div>
+        <div class="field"><label>Calificación</label>
+          <div class="star-picker" id="starPicker">
+            <i class="fa-solid fa-star" data-v="1"></i><i class="fa-solid fa-star" data-v="2"></i><i class="fa-solid fa-star" data-v="3"></i><i class="fa-solid fa-star" data-v="4"></i><i class="fa-solid fa-star" data-v="5"></i>
+          </div>
+        </div>
+        <div class="field"><label for="rComment">Comentario</label><textarea id="rComment" required placeholder="¿Cómo fue tu experiencia?"></textarea></div>
+        <button type="submit" class="btn" style="justify-self:start;">Publicar reseña</button>
+        <div class="msg" id="reviewMsg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+ 
+<section id="reservar">
+  <div class="section-head">
+    <div class="eyebrow">Agenda tu turno</div>
+    <h2>Reservar cita</h2>
+    <p>Elige servicio, fecha y horario disponible.</p>
+  </div>
+  <div class="booking-wrap">
+    <form id="bookingForm">
+      <div class="field"><label for="name">Nombre completo</label><input type="text" id="name" required placeholder="Tu nombre"></div>
+      <div class="row2">
+        <div class="field"><label for="phone">Teléfono</label><input type="tel" id="phone" required placeholder="10 dígitos"></div>
+        <div class="field"><label for="service">Servicio</label><select id="service" required><option value="">Selecciona...</option></select></div>
+      </div>
+      <div class="field"><label for="date">Fecha</label><input type="date" id="date" required></div>
+      <div class="field">
+        <label>Horario disponible</label>
+        <div class="slots" id="slots"><div class="loading">Cargando horarios...</div></div>
+        <div class="msg error" id="slotMsg"></div>
+      </div>
+      <button type="submit" class="btn" style="justify-self:start;">Confirmar cita</button>
+      <div class="msg" id="formMsg"></div>
+    </form>
+    <div class="ticket">
+      <h3>Estado de tu cita</h3>
+      <div id="ticketBody"><p class="stub-empty">Aquí verás la confirmación en cuanto reserves tu turno.</p></div>
+    </div>
+  </div>
+</section>
+ 
+<div class="stripe"></div>
+ 
+<section id="contacto">
+  <div class="section-head"><div class="eyebrow">Visítanos</div><h2>Contacto y ubicación</h2></div>
+  <div class="contact-wrap">
+    <div>
+      <div class="info-line"><div class="k">Dirección</div><div id="cAddress">Av. Insurgentes Sur 1234, Col. Del Valle, CDMX</div></div>
+      <a class="info-line linkable" id="cPhoneLink" href="tel:"><div class="k">Teléfono</div><div class="mono" id="cPhone">+52 55 1234 5678</div></a>
+      <div class="info-line"><div class="k">Horario</div><div id="cHours">Lun–Sáb, 10:00–20:00 · Dom cerrado</div></div>
+      <div class="info-line"><div class="k">Email</div><div id="cEmail">hola@lanavajadorada.mx</div></div>
+      <div class="social-cta">
+        <a id="fbContactBtn" href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+        <a id="igContactBtn" href="#" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a id="waContactBtn" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </div>
+    <div class="map-placeholder"><iframe id="mapFrame" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación en el mapa"></iframe></div>
+  </div>
+</section>
+ 
+<footer>
+  <div class="stripe thin" style="margin-bottom:20px;"></div>
+  © 2026 <span id="footerName">La Navaja Dorada</span> — Barbería. · <a id="openAdmin">Editar página</a>
+</footer>
+ 
+<a id="fbFloatBtn" href="#" target="_blank" class="float-btn float-fb" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+<a id="igFloatBtn" href="#" target="_blank" class="float-btn float-ig" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+<a id="waFloatBtn" href="#" target="_blank" class="float-btn float-wa" aria-label="Escribir por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+ 
+<!-- Modal panel del dueño -->
+<div class="modal-overlay" id="adminOverlay">
+  <div class="modal">
+    <div class="mhead"><h3>Panel del dueño</h3><button class="close-btn" id="closeAdmin"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="adminLogin">
+      <p style="color:var(--muted); font-size:.85rem; margin-bottom:14px;">Solo tú puedes editar la página. Ingresa tu contraseña.</p>
+      <div class="field"><input type="password" id="adminPass" placeholder="Contraseña"></div>
+      <button class="btn btn-sm" id="adminLoginBtn" style="margin-top:10px;">Entrar</button>
+      <div class="msg error" id="adminLoginMsg"></div>
+    </div>
+    <div id="adminContent" style="display:none;">
+      <div class="admin-tabs">
+        <div class="admin-tab active" data-tab="contenido">Contenido</div>
+        <div class="admin-tab" data-tab="citas">Citas</div>
+        <div class="admin-tab" data-tab="resenas">Reseñas</div>
+      </div>
+      <div id="tabContenido"></div>
+      <div id="tabCitas" style="display:none;"></div>
+      <div id="tabResenas" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+ 
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lb-close" id="lightboxClose"><i class="fa-solid fa-xmark"></i></button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lb-caption" id="lightboxCaption"></div>
+</div>
+ 
+<script>
+  // ============ Conexión directa a Firestore (REST simple, sin el SDK en tiempo real) ============
+  const FIREBASE_PROJECT_ID = "navaja-dorada-e6a0d";
+  const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/default/documents/site_data`;
+ 
+  function fetchWithTimeout(url, options, ms){
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+  }
+ 
+  // ============ Almacenamiento compartido (Firestore vía REST) ============
+  async function getShared(key, fallback){
+    const t0 = performance.now();
+    try{
+      const res = await fetchWithTimeout(`${FIRESTORE_BASE}/${key}`, {}, 12000);
+      if(res.status === 404){ console.log(`[Firestore] "${key}" no existe todavía, usando valor por defecto.`); return fallback; }
+      if(!res.ok){ throw new Error(`HTTP ${res.status}`); }
+      const data = await res.json();
+      const raw = data && data.fields && data.fields.value && data.fields.value.stringValue;
+      console.log(`[Firestore] leer "${key}": ${Math.round(performance.now()-t0)}ms`);
+      if(raw === undefined) return fallback;
+      const parsed = JSON.parse(raw);
+      return (parsed === null || parsed === undefined) ? fallback : parsed;
+    }catch(e){ console.error(`[Firestore] Error leyendo "${key}" tras ${Math.round(performance.now()-t0)}ms`, e); return fallback; }
+  }
+  async function setShared(key, value){
+    if(value === null || value === undefined){
+      console.error('Se intentó guardar un valor vacío en', key, '— cancelado para evitar corromper los datos.');
+      throw new Error('Valor vacío, no se guardó nada.');
+    }
+    const t0 = performance.now();
+    const payload = JSON.stringify(value);
+    console.log(`[Firestore] guardando "${key}", tamaño: ${(payload.length/1024).toFixed(1)} KB`);
+    try{
+      const res = await fetchWithTimeout(`${FIRESTORE_BASE}/${key}?updateMask.fieldPaths=value`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { value: { stringValue: payload } } })
+      }, 15000);
+      if(!res.ok){ const errBody = await res.text(); throw new Error(`HTTP ${res.status}: ${errBody}`); }
+      console.log(`[Firestore] guardado "${key}": ${Math.round(performance.now()-t0)}ms`);
+    }catch(e){ console.error(`[Firestore] Error guardando "${key}" tras ${Math.round(performance.now()-t0)}ms`, e); throw e; }
+  }
+ 
+  const DEFAULT_CONTENT = {
+    shopName: 'La Navaja Dorada',
+    pageTitle: 'La Navaja Dorada — Barbería',
+    pageDescription: 'Reserva tu cita en La Navaja Dorada. Cortes clásicos, fade de precisión y arreglo de barba con navaja.',
+    heroTitle: 'Cada corte se afila\ncon el mismo cuidado.',
+    heroSubtitle: 'Cortes clásicos, fade de precisión y arreglo de barba con navaja. Reserva tu turno en menos de un minuto.',
+    barberName: 'Rubén Alvarado',
+    barberSpecialty: 'Fade, diseño y navaja clásica',
+    barberBio: 'Más de 12 años de experiencia perfeccionando cortes clásicos y modernos, con especial atención al detalle en cada barba y acabado a navaja.',
+    services: [
+      {name:'Corte clásico', desc:'Tijera y máquina, acabado con navaja', price:180, slots:1},
+      {name:'Fade / degradado', desc:'Alta precisión, líneas marcadas', price:220, slots:1},
+      {name:'Arreglo de barba', desc:'Perfilado y navaja', price:150, slots:1},
+      {name:'Corte + barba', desc:'El paquete completo', price:320, slots:2},
+      {name:'Afeitado clásico', desc:'Navaja, toalla caliente, aceites', price:200, slots:1},
+      {name:'Corte niño', desc:'Hasta 12 años', price:130, slots:1}
+    ],
+    address:'Av. Insurgentes Sur 1234, Col. Del Valle, CDMX',
+    phone:'+52 55 1234 5678',
+    hours:'Lun–Sáb, 10:00–20:00 · Dom cerrado',
+    email:'hola@lanavajadorada.mx',
+    whatsapp:'525512345678',
+    facebookUrl:'',
+    instagramUrl:'',
+    waMessage:'Hola 👋, me gustaría agendar una cita en *{shop}* 💈✨. ¿Me podrían confirmar la disponibilidad?',
+    barberPhoto:null,
+    heroBackground:null,
+    gallery:[
+      {caption:'Fade clásico', image:null},
+      {caption:'Barba tallada', image:null},
+      {caption:'Pompadour', image:null},
+      {caption:'Afeitado a navaja', image:null},
+      {caption:'Corte texturizado', image:null},
+      {caption:'Fade + diseño', image:null},
+      {caption:'Corte niño', image:null},
+      {caption:'Barba + bigote', image:null}
+    ]
+  };
+ 
+  // Reduce y comprime una imagen antes de guardarla (las fotos se guardan como texto base64)
+  function resizeImageFile(file, maxWidth=760, quality=0.72){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+ 
+  let content = null;
+  let mediaDirty = false;
+ 
+  function mergeContent(textPart, mediaPart){
+    const t = textPart || {};
+    const m = mediaPart || {};
+    const baseGallery = t.gallery || DEFAULT_CONTENT.gallery;
+    const galleryImages = m.galleryImages || baseGallery.map(g => g.image || null);
+    const gallery = baseGallery.map((g, i) => ({ caption: g.caption, image: galleryImages[i] || null }));
+    return {
+      ...DEFAULT_CONTENT,
+      ...t,
+      gallery,
+      barberPhoto: (m.barberPhoto !== undefined ? m.barberPhoto : t.barberPhoto) || null,
+      heroBackground: (m.heroBackground !== undefined ? m.heroBackground : t.heroBackground) || null
+    };
+  }
+ 
+  async function loadContent(){
+    const [textPart, mediaPart] = await Promise.all([
+      getShared('siteContent', null),
+      getShared('siteMedia', null)
+    ]);
+    return mergeContent(textPart, mediaPart);
+  }
+ 
+  async function saveContent(c){
+    const textPart = { ...c, gallery: c.gallery.map(g => ({ caption: g.caption })) };
+    delete textPart.barberPhoto;
+    delete textPart.heroBackground;
+    const tasks = [ setShared('siteContent', textPart) ];
+    if(mediaDirty){
+      const mediaPart = { barberPhoto: c.barberPhoto, heroBackground: c.heroBackground, galleryImages: c.gallery.map(g => g.image) };
+      tasks.push(setShared('siteMedia', mediaPart));
+    }
+    await Promise.all(tasks);
+    mediaDirty = false;
+  }
+  let contentReadyResolve;
+  const contentReady = new Promise(res => { contentReadyResolve = res; });
+ 
+  function initials(name){
+    return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+  }
+ 
+  function renderContent(){
+    document.getElementById('navLogo').innerHTML = content.shopName.replace(/(\w+)$/, '<span>$1</span>');
+    document.title = content.pageTitle || content.shopName;
+    const descTag = document.getElementById('pageDescTag');
+    if(descTag) descTag.setAttribute('content', content.pageDescription || '');
+    document.getElementById('heroTitle').innerHTML = content.heroTitle.replace(/\n/g,'<br>');
+    document.getElementById('heroSubtitle').textContent = content.heroSubtitle;
+ 
+    const heroSection = document.getElementById('heroSection');
+    if(content.heroBackground){
+      heroSection.classList.add('has-bg');
+      heroSection.style.backgroundImage = `url(${content.heroBackground})`;
+    }else{
+      heroSection.classList.remove('has-bg');
+      heroSection.style.backgroundImage = '';
+    }
+    document.getElementById('barberName').textContent = content.barberName;
+    document.getElementById('barberSpecialty').textContent = content.barberSpecialty;
+    document.getElementById('barberBio').textContent = content.barberBio;
+ 
+    const barberAvatar = document.getElementById('barberAvatar');
+    barberAvatar.innerHTML = content.barberPhoto
+      ? `<img src="${content.barberPhoto}" alt="Foto de ${content.barberName}">`
+      : `<span id="barberInitials">${initials(content.barberName)}</span>`;
+ 
+    document.getElementById('cAddress').textContent = content.address;
+    document.getElementById('cPhone').textContent = content.phone;
+    document.getElementById('cPhoneLink').href = 'tel:' + content.phone.replace(/[^\d+]/g,'');
+    document.getElementById('mapFrame').src = 'https://www.google.com/maps?q=' + encodeURIComponent(content.address) + '&output=embed';
+    document.getElementById('cHours').textContent = content.hours;
+    document.getElementById('cEmail').textContent = content.email;
+    document.getElementById('footerName').textContent = content.shopName;
+ 
+    const waMessage = encodeURIComponent((content.waMessage || DEFAULT_CONTENT.waMessage).replace('{shop}', content.shopName));
+    const waLink = 'https://wa.me/' + content.whatsapp.replace(/\D/g,'') + '?text=' + waMessage;
+    ['waHeroBtn','waNavBtn','waContactBtn','waFloatBtn'].forEach(id => document.getElementById(id).href = waLink);
+    const fbLink = content.facebookUrl || '#';
+    const igLink = content.instagramUrl || '#';
+    document.getElementById('fbNavBtn').href = fbLink;
+    document.getElementById('igNavBtn').href = igLink;
+    document.getElementById('fbContactBtn').href = fbLink;
+    document.getElementById('igContactBtn').href = igLink;
+    document.getElementById('fbFloatBtn').href = fbLink;
+    document.getElementById('igFloatBtn').href = igLink;
+ 
+    const servicesList = document.getElementById('servicesList');
+    servicesList.innerHTML = '';
+    content.services.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'service-row';
+      row.innerHTML = `<div><div class="name">${s.name}</div><div class="desc">${s.desc}</div></div><div class="price">$${s.price}</div>`;
+      servicesList.appendChild(row);
+    });
+ 
+    const serviceSelect = document.getElementById('service');
+    serviceSelect.innerHTML = '<option value="">Selecciona...</option>' + content.services.map(s => `<option value="${s.name}">${s.name} — $${s.price}</option>`).join('');
+ 
+    const galleryGrid = document.getElementById('galleryGrid');
+    galleryGrid.innerHTML = '';
+    const tilePairs = [['#2a2117','#171310'],['#241f22','#14120f'],['#22201a','#171310'],['#251c1c','#14120f'],['#1f231d','#14120f'],['#241f18','#171310'],['#221c22','#14120f'],['#231f1a','#171310']];
+    content.gallery.forEach((g,i) => {
+      const [a,b] = tilePairs[i % tilePairs.length];
+      const tile = document.createElement('div');
+      tile.className = 'gallery-tile';
+      tile.style.setProperty('--tile-a', a);
+      tile.style.setProperty('--tile-b', b);
+      tile.innerHTML = (g.image ? `<img src="${g.image}" alt="${g.caption}">` : '') + `<span>${g.caption}</span>`;
+      if(g.image){
+        tile.addEventListener('click', () => openLightbox(g.image, g.caption));
+      }
+      galleryGrid.appendChild(tile);
+    });
+  }
+ 
+  // ============ Reservas ============
+  // Horarios generados automáticamente: de 10:00 a 21:00 (9pm), citas de 45 minutos cada una
+  function generateSlots(startHour, endHour, durationMin){
+    const slots = [];
+    let minutesFromMidnight = startHour * 60;
+    const endMinutes = endHour * 60;
+    while(minutesFromMidnight < endMinutes){
+      const h = Math.floor(minutesFromMidnight / 60);
+      const m = minutesFromMidnight % 60;
+      slots.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+      minutesFromMidnight += durationMin;
+    }
+    return slots;
+  }
+  const allSlots = ['10:00','10:45','11:30','12:15','13:00','13:45','14:30','15:15','16:00','16:45','17:30','18:15','19:00','19:45','20:30'];
+  let selectedSlot = null;
+  let bookingsCache = [];
+  const dateInput = document.getElementById('date');
+  dateInput.min = new Date().toISOString().split('T')[0];
+ 
+  async function loadBookings(){ bookingsCache = await getShared('bookings', []); }
+ 
+  function getServiceSlots(serviceName){
+    const svc = content.services.find(s => s.name === serviceName);
+    return (svc && svc.slots) || 1;
+  }
+ 
+  function occupiedTimesOf(b){
+    const idx = allSlots.indexOf(b.time);
+    if(idx === -1) return [b.time];
+    return allSlots.slice(idx, idx + (b.slotsUsed || 1));
+  }
+ 
+  function isTimeOccupied(chosenDate, time){
+    return bookingsCache.some(b => b.date === chosenDate && b.status !== 'cancelada' && occupiedTimesOf(b).includes(time));
+  }
+ 
+  function hasRoomFrom(chosenDate, startIdx, needed){
+    if(startIdx + needed > allSlots.length) return false;
+    for(let i = startIdx; i < startIdx + needed; i++){
+      if(isTimeOccupied(chosenDate, allSlots[i])) return false;
+    }
+    return true;
+  }
+ 
+  function renderSlots(){
+    const slotsEl = document.getElementById('slots');
+    const slotMsg = document.getElementById('slotMsg');
+    slotsEl.innerHTML = '';
+    slotMsg.className = 'msg';
+    slotMsg.textContent = '';
+    const chosenDate = dateInput.value;
+ 
+    if(!chosenDate){
+      slotsEl.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Elige una fecha para ver los horarios.</div>';
+      return;
+    }
+ 
+    const needed = getServiceSlots(document.getElementById('service').value);
+    const isTaken = (time) => isTimeOccupied(chosenDate, time);
+    const diaLleno = allSlots.every(isTaken);
+ 
+    if(diaLleno){
+      slotsEl.innerHTML = '<div class="empty-note" style="grid-column:1/-1;">Este día ya está lleno. Por favor elige otra fecha.</div>';
+      slotMsg.className = 'msg error';
+      slotMsg.textContent = 'No hay horarios disponibles para este día.';
+      return;
+    }
+ 
+    allSlots.forEach((time, idx) => {
+      const taken = !hasRoomFrom(chosenDate, idx, needed);
+      const el = document.createElement('div');
+      el.className = 'slot' + (taken ? ' disabled' : '') + (selectedSlot === time ? ' selected' : '');
+      el.textContent = time;
+      if(!taken){ el.addEventListener('click', () => { selectedSlot = time; renderSlots(); }); }
+      slotsEl.appendChild(el);
+    });
+ 
+    if(needed > 1){
+      slotMsg.className = 'msg';
+      slotMsg.textContent = `Este servicio ocupa ${needed} turnos (${needed*45} min).`;
+    }
+  }
+  dateInput.addEventListener('change', () => { selectedSlot = null; renderSlots(); });
+  document.getElementById('service').addEventListener('change', () => { selectedSlot = null; renderSlots(); });
+ 
+  function buildConfirmationWaLink(name, phone, service, date, time){
+    const msg = `✨ *Nueva cita confirmada — ${content.shopName}* ✨\n\n👤 Cliente: ${name}\n📞 Teléfono: ${phone}\n💈 Servicio: ${service}\n📅 Fecha: ${date}\n🕒 Hora: ${time}\n\n¡Gracias por reservar, nos vemos pronto! 🙌`;
+    return 'https://wa.me/' + content.whatsapp.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
+  }
+ 
+  document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const service = document.getElementById('service').value;
+    const date = dateInput.value;
+    const slotMsg = document.getElementById('slotMsg');
+    const formMsg = document.getElementById('formMsg');
+    slotMsg.textContent = ''; formMsg.textContent = '';
+    if(!date){ formMsg.className='msg error'; formMsg.textContent='Elige una fecha.'; return; }
+    if(!selectedSlot){ slotMsg.className='msg error'; slotMsg.textContent='Elige un horario disponible.'; return; }
+ 
+    await loadBookings();
+    const needed = getServiceSlots(service);
+    const startIdx = allSlots.indexOf(selectedSlot);
+    const stillFree = hasRoomFrom(date, startIdx, needed);
+    if(!stillFree){ slotMsg.className='msg error'; slotMsg.textContent='Ese horario ya no tiene suficiente espacio para este servicio, elige otro.'; renderSlots(); return; }
+ 
+    const newBooking = { id: Date.now().toString(36), name, phone, service, barber: content.barberName, date, time: selectedSlot, slotsUsed: needed, status: 'pendiente' };
+    bookingsCache.push(newBooking);
+    await setShared('bookings', bookingsCache);
+ 
+    const waLinkConfirm = buildConfirmationWaLink(name, phone, service, date, selectedSlot);
+ 
+    document.getElementById('ticketBody').innerHTML = `
+      <p>¡Listo, ${name}! Tu cita quedó registrada para el <strong class="mono">${date}</strong> a las <strong class="mono">${selectedSlot}</strong>. En breve te confirmamos.</p>
+      <a href="${waLinkConfirm}" target="_blank" class="btn btn-wa" style="width:100%; justify-content:center; margin-top:16px;">
+        <i class="fa-brands fa-whatsapp"></i> Avisar por WhatsApp
+      </a>`;
+    formMsg.className='msg ok'; formMsg.textContent = '¡Solicitud enviada! Te esperamos.';
+    e.target.reset(); selectedSlot = null; renderSlots();
+ 
+    // Abre WhatsApp automáticamente con el mensaje ya listo, justo al generarse la confirmación
+    window.open(waLinkConfirm, '_blank');
+  });
+ 
+  // ============ Reseñas ============
+  let selectedStars = 5;
+  const starPicker = document.getElementById('starPicker');
+  function paintStars(){ [...starPicker.children].forEach(i => i.classList.toggle('active', parseInt(i.dataset.v) <= selectedStars)); }
+  starPicker.addEventListener('click', (e) => { if(e.target.dataset.v){ selectedStars = parseInt(e.target.dataset.v); paintStars(); } });
+  paintStars();
+  function starString(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
+ 
+  let reviewsCache = [];
+  async function renderReviews(){
+    reviewsCache = await getShared('reviews', [
+      {id:'seed1', name:'Marco A.', stars:5, comment:'Excelente atención, el fade quedó perfecto.', date:'2026-06-20'},
+      {id:'seed2', name:'Diego R.', stars:5, comment:'Un artista con la navaja.', date:'2026-06-15'},
+      {id:'seed3', name:'Luis F.', stars:4, comment:'Muy buen servicio, un poco de espera.', date:'2026-06-10'}
+    ]);
+    const list = document.getElementById('reviewList');
+    list.innerHTML = '';
+    reviewsCache.slice().reverse().forEach(r => {
+      const el = document.createElement('div');
+      el.className = 'review-card';
+      el.innerHTML = `<div class="rh"><strong>${r.name}</strong><span class="stars">${starString(r.stars)}</span></div><p>${r.comment}</p><div class="rd">${r.date}</div>`;
+      list.appendChild(el);
+    });
+    const avg = reviewsCache.length ? (reviewsCache.reduce((s,r)=>s+r.stars,0)/reviewsCache.length).toFixed(1) : '—';
+    document.getElementById('ratingText').textContent = `${avg} de 5 · ${reviewsCache.length} reseñas`;
+    document.getElementById('barberRatingText').textContent = `${avg} · ${reviewsCache.length} reseñas`;
+  }
+ 
+  document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('rName').value.trim();
+    const comment = document.getElementById('rComment').value.trim();
+    const msg = document.getElementById('reviewMsg');
+    reviewsCache.push({ id: Date.now().toString(36), name, stars: selectedStars, comment, date: new Date().toISOString().split('T')[0] });
+    await setShared('reviews', reviewsCache);
+    msg.className = 'msg ok'; msg.textContent = '¡Gracias por tu reseña!';
+    e.target.reset(); selectedStars = 5; paintStars();
+    await renderReviews();
+  });
+ 
+  // ============ Panel del dueño (contraseña solo del lado del cliente, demo) ============
+  const ADMIN_PASS = 'barberia2026';
+  const adminOverlay = document.getElementById('adminOverlay');
+  document.getElementById('openAdmin').addEventListener('click', () => adminOverlay.classList.add('open'));
+  document.getElementById('closeAdmin').addEventListener('click', () => adminOverlay.classList.remove('open'));
+  adminOverlay.addEventListener('click', (e) => { if(e.target === adminOverlay) adminOverlay.classList.remove('open'); });
+ 
+  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+    const pass = document.getElementById('adminPass').value;
+    const msg = document.getElementById('adminLoginMsg');
+    if(pass !== ADMIN_PASS){ msg.textContent = 'Contraseña incorrecta.'; return; }
+    msg.textContent = '';
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+    document.getElementById('tabContenido').innerHTML = '<div class="loading">Cargando datos...</div>';
+    const t0 = performance.now();
+    try{
+      await contentReady;
+      renderTabContenido();
+      await loadBookings(); renderTabCitas();
+      renderTabResenas();
+      const secs = ((performance.now()-t0)/1000).toFixed(1);
+      const note = document.createElement('div');
+      note.style.cssText = 'color:var(--muted); font-size:.72rem; text-align:right; margin-top:-10px; margin-bottom:14px;';
+      note.textContent = `Cargado en ${secs}s`;
+      document.getElementById('tabContenido').prepend(note);
+    }catch(err){
+      console.error('Error abriendo el panel de edición', err);
+      document.getElementById('tabContenido').innerHTML =
+        `<div class="empty-note" style="color:#e08a8a;">Ocurrió un error al cargar el panel: ${err && err.message ? err.message : err}</div>`;
+    }
+  });
+ 
+  document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      ['contenido','citas','resenas'].forEach(t => document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).style.display = 'none');
+      const el = document.getElementById('tab'+tab.dataset.tab[0].toUpperCase()+tab.dataset.tab.slice(1));
+      el.style.display = 'block';
+    });
+  });
+ 
+  function renderTabContenido(){
+    const el = document.getElementById('tabContenido');
+    el.innerHTML = `
+      <fieldset><legend>Negocio</legend>
+        <div class="field"><label>Nombre del negocio</label><input id="edShopName" value="${content.shopName}"></div>
+        <div class="field"><label>Título de la pestaña del navegador (SEO)</label><input id="edPageTitle" value="${content.pageTitle || ''}" placeholder="Ej. La Navaja Dorada — Barbería"></div>
+        <div class="field"><label>Descripción para buscadores como Google (SEO)</label><textarea id="edPageDescription" placeholder="Una o dos frases que describan tu barbería">${content.pageDescription || ''}</textarea></div>
+        <div class="field"><label>Título del hero</label><textarea id="edHeroTitle">${content.heroTitle}</textarea></div>
+        <div class="field"><label>Subtítulo del hero</label><textarea id="edHeroSubtitle">${content.heroSubtitle}</textarea></div>
+        <div class="field">
+          <label>Imagen de fondo del hero (opcional)</label>
+          <div class="avatar-upload">
+            <img class="thumb-lg" id="heroBgPreview" src="${content.heroBackground || ''}" style="${content.heroBackground ? '' : 'display:none;'}">
+            <div>
+              <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" id="heroBgInput" accept="image/*"></label>
+              <button type="button" class="btn btn-sm btn-danger" id="removeHeroBgBtn" style="margin-top:6px; ${content.heroBackground ? '' : 'display:none;'}">Quitar foto de fondo</button>
+            </div>
+          </div>
+          <div class="msg" id="heroBgMsg"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Barbero</legend>
+        <div class="field"><label>Nombre</label><input id="edBarberName" value="${content.barberName}"></div>
+        <div class="field"><label>Especialidad</label><input id="edBarberSpecialty" value="${content.barberSpecialty}"></div>
+        <div class="field"><label>Biografía</label><textarea id="edBarberBio">${content.barberBio}</textarea></div>
+        <div class="field">
+          <label>Foto del barbero</label>
+          <div class="avatar-upload">
+            <img class="thumb-lg" id="barberPhotoPreview" src="${content.barberPhoto || ''}" style="${content.barberPhoto ? '' : 'display:none;'}">
+            <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" id="barberPhotoInput" accept="image/*"></label>
+          </div>
+          <div class="msg" id="barberPhotoMsg"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Servicios</legend>
+        <div id="svcEditor"></div>
+        <button type="button" class="btn btn-sm btn-outline" id="addSvcBtn">+ Agregar servicio</button>
+      </fieldset>
+      <fieldset><legend>Galería (fotos de cortes)</legend>
+        <div id="galEditor"></div>
+        <button type="button" class="btn btn-sm btn-outline" id="addGalBtn">+ Agregar foto</button>
+      </fieldset>
+      <fieldset><legend>Contacto y redes</legend>
+        <div class="field"><label>Dirección</label><input id="edAddress" value="${content.address}"></div>
+        <div class="row2">
+          <div class="field"><label>Teléfono mostrado</label><input id="edPhone" value="${content.phone}"></div>
+          <div class="field"><label>WhatsApp (solo números, con código de país)</label><input id="edWhatsapp" value="${content.whatsapp}"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Horario</label><input id="edHours" value="${content.hours}"></div>
+          <div class="field"><label>Email</label><input id="edEmail" value="${content.email}"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Link de Facebook</label><input id="edFacebook" value="${content.facebookUrl || ''}" placeholder="https://facebook.com/tu-pagina"></div>
+          <div class="field"><label>Link de Instagram</label><input id="edInstagram" value="${content.instagramUrl || ''}" placeholder="https://instagram.com/tu-cuenta"></div>
+        </div>
+        <div class="field">
+          <label>Mensaje que se prellena al escribir por WhatsApp (usa {shop} para el nombre del negocio)</label>
+          <textarea id="edWaMessage">${content.waMessage || DEFAULT_CONTENT.waMessage}</textarea>
+        </div>
+      </fieldset>
+      <button class="btn" id="saveContentBtn">Guardar cambios</button>
+      <div class="msg" id="saveContentMsg"></div>`;
+ 
+    document.getElementById('heroBgInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const msg = document.getElementById('heroBgMsg');
+      msg.textContent = 'Procesando imagen...';
+      try{
+        const dataUrl = await resizeImageFile(file, 1000, 0.6);
+        content.heroBackground = dataUrl;
+        mediaDirty = true;
+        const preview = document.getElementById('heroBgPreview');
+        preview.src = dataUrl; preview.style.display = 'block';
+        document.getElementById('removeHeroBgBtn').style.display = 'inline-flex';
+        msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
+      }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
+    });
+    document.getElementById('removeHeroBgBtn').addEventListener('click', () => {
+      content.heroBackground = null;
+      mediaDirty = true;
+      document.getElementById('heroBgPreview').style.display = 'none';
+      document.getElementById('removeHeroBgBtn').style.display = 'none';
+      document.getElementById('heroBgMsg').textContent = 'Se quitará al guardar cambios.';
+    });
+    document.getElementById('barberPhotoInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const msg = document.getElementById('barberPhotoMsg');
+      msg.textContent = 'Procesando imagen...';
+      try{
+        const dataUrl = await resizeImageFile(file, 400, 0.7);
+        content.barberPhoto = dataUrl;
+        mediaDirty = true;
+        const preview = document.getElementById('barberPhotoPreview');
+        preview.src = dataUrl; preview.style.display = 'block';
+        msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
+      }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
+    });
+ 
+    function renderSvcRows(){
+      const wrap = document.getElementById('svcEditor');
+      wrap.innerHTML = '';
+      content.services.forEach((s, i) => {
+        const row = document.createElement('div');
+        row.className = 'svc-editor-row';
+        row.innerHTML = `
+          <input data-i="${i}" data-f="name" value="${s.name}" placeholder="Nombre">
+          <input data-i="${i}" data-f="desc" value="${s.desc}" placeholder="Descripción">
+          <input data-i="${i}" data-f="price" type="number" value="${s.price}" placeholder="Precio">
+          <input data-i="${i}" data-f="slots" type="number" min="1" max="4" value="${s.slots || 1}" title="Turnos de 45 min que ocupa" placeholder="Turnos">
+          <button type="button" class="btn btn-sm btn-danger" data-remove="${i}"><i class="fa-solid fa-trash"></i></button>`;
+        wrap.appendChild(row);
+      });
+      wrap.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const i = parseInt(inp.dataset.i); const f = inp.dataset.f;
+          content.services[i][f] = (f === 'price' || f === 'slots') ? (parseInt(inp.value)||1) : inp.value;
+        });
+      });
+      wrap.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => { content.services.splice(parseInt(btn.dataset.remove),1); renderSvcRows(); });
+      });
+    }
+    renderSvcRows();
+    document.getElementById('addSvcBtn').addEventListener('click', () => {
+      content.services.push({name:'Nuevo servicio', desc:'', price:0, slots:1}); renderSvcRows();
+    });
+ 
+    function renderGalRows(){
+      const wrap = document.getElementById('galEditor');
+      wrap.innerHTML = '';
+      content.gallery.forEach((g, i) => {
+        const row = document.createElement('div');
+        row.className = 'img-editor-row';
+        row.innerHTML = `
+          <img class="thumb" src="${g.image || ''}" style="${g.image ? '' : 'background:var(--bg-alt);'}">
+          <div>
+            <input type="text" data-i="${i}" data-f="caption" value="${g.caption}" placeholder="Descripción (ej. Fade clásico)">
+            <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" accept="image/*" data-i="${i}" class="galFileInput"></label>
+            <div class="msg" data-gmsg="${i}"></div>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger" data-remove="${i}"><i class="fa-solid fa-trash"></i></button>`;
+        wrap.appendChild(row);
+      });
+      wrap.querySelectorAll('input[type="text"]').forEach(inp => {
+        inp.addEventListener('input', () => { content.gallery[parseInt(inp.dataset.i)].caption = inp.value; });
+      });
+      wrap.querySelectorAll('.galFileInput').forEach(inp => {
+        inp.addEventListener('change', async (e) => {
+          const i = parseInt(inp.dataset.i);
+          const file = e.target.files[0];
+          if(!file) return;
+          const msgEl = wrap.querySelector(`[data-gmsg="${i}"]`);
+          msgEl.textContent = 'Procesando imagen...';
+          try{
+            const dataUrl = await resizeImageFile(file, 550, 0.65);
+            content.gallery[i].image = dataUrl;
+            mediaDirty = true;
+            renderGalRows();
+          }catch(err){ msgEl.className='msg error'; msgEl.textContent = 'No se pudo procesar la imagen.'; }
+        });
+      });
+      wrap.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => { content.gallery.splice(parseInt(btn.dataset.remove),1); mediaDirty = true; renderGalRows(); });
+      });
+    }
+    renderGalRows();
+    document.getElementById('addGalBtn').addEventListener('click', () => {
+      content.gallery.push({caption:'Nueva foto', image:null}); mediaDirty = true; renderGalRows();
+    });
+ 
+    document.getElementById('saveContentBtn').addEventListener('click', async () => {
+      content.shopName = document.getElementById('edShopName').value;
+      content.pageTitle = document.getElementById('edPageTitle').value;
+      content.pageDescription = document.getElementById('edPageDescription').value;
+      content.heroTitle = document.getElementById('edHeroTitle').value;
+      content.heroSubtitle = document.getElementById('edHeroSubtitle').value;
+      content.barberName = document.getElementById('edBarberName').value;
+      content.barberSpecialty = document.getElementById('edBarberSpecialty').value;
+      content.barberBio = document.getElementById('edBarberBio').value;
+      content.address = document.getElementById('edAddress').value;
+      content.phone = document.getElementById('edPhone').value;
+      content.whatsapp = document.getElementById('edWhatsapp').value;
+      content.hours = document.getElementById('edHours').value;
+      content.email = document.getElementById('edEmail').value;
+      content.facebookUrl = document.getElementById('edFacebook').value;
+      content.instagramUrl = document.getElementById('edInstagram').value;
+      content.waMessage = document.getElementById('edWaMessage').value;
+      const msg = document.getElementById('saveContentMsg');
+      msg.className='msg'; msg.textContent='Guardando...';
+      const tSave0 = performance.now();
+      try{
+        await saveContent(content);
+        renderContent();
+        const secs = ((performance.now()-tSave0)/1000).toFixed(1);
+        msg.className='msg ok'; msg.textContent=`Cambios guardados y publicados (${secs}s).`;
+      }catch(err){
+        msg.className='msg error';
+        msg.textContent = 'No se pudo guardar. Revisa que la base de datos de Firebase esté creada y con reglas que permitan escribir. Detalle: ' + (err && err.message ? err.message : err);
+      }
+    });
+  }
+ 
+  function renderTabCitas(){
+    const el = document.getElementById('tabCitas');
+    if(!bookingsCache.length){ el.innerHTML = '<div class="empty-note">Aún no hay citas reservadas.</div>'; return; }
+    const sorted = [...bookingsCache].sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time));
+    el.innerHTML = '';
+    sorted.forEach(b => {
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      let actions = '';
+      if(b.status === 'pendiente'){
+        actions = `
+          <button class="btn btn-sm" data-act="confirmar" data-id="${b.id}">Confirmar cita</button>
+          <button class="btn btn-sm btn-danger" data-act="cancelar" data-id="${b.id}">Cancelar</button>`;
+      }else if(b.status === 'confirmada'){
+        actions = `
+          <button class="btn btn-sm" data-act="completar" data-id="${b.id}">Marcar completada</button>
+          <button class="btn btn-sm btn-danger" data-act="cancelar" data-id="${b.id}">Cancelar</button>`;
+      }else{
+        actions = `<button class="btn btn-sm btn-danger" data-act="eliminar" data-id="${b.id}">Eliminar</button>`;
+      }
+      row.innerHTML = `
+        <div class="top-row"><strong>${b.name}</strong><span class="badge ${b.status}">${b.status}</span></div>
+        <div>${b.service}</div>
+        <div class="mono">${b.date} — ${b.time} · ${b.phone}</div>
+        <div class="actions">${actions}</div>`;
+      el.appendChild(row);
+    });
+    el.querySelectorAll('button[data-act]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const act = btn.dataset.act;
+        if(act === 'eliminar'){
+          bookingsCache = bookingsCache.filter(x => x.id !== btn.dataset.id);
+        }else{
+          const b = bookingsCache.find(x => x.id === btn.dataset.id);
+          if(!b) return;
+          if(act === 'confirmar') b.status = 'confirmada';
+          else if(act === 'completar') b.status = 'completada';
+          else if(act === 'cancelar') b.status = 'cancelada';
+        }
+        await setShared('bookings', bookingsCache);
+        renderTabCitas(); renderSlots();
+      });
+    });
+  }
+ 
+  function renderTabResenas(){
+    const el = document.getElementById('tabResenas');
+    if(!reviewsCache.length){ el.innerHTML = '<div class="empty-note">Aún no hay reseñas.</div>'; return; }
+    el.innerHTML = '';
+    reviewsCache.slice().reverse().forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      row.innerHTML = `
+        <div class="top-row"><strong>${r.name}</strong><span class="stars">${starString(r.stars)}</span></div>
+        <div style="color:var(--muted);">${r.comment}</div>
+        <div class="actions"><button class="btn btn-sm btn-danger" data-del="${r.id}">Eliminar</button></div>`;
+      el.appendChild(row);
+    });
+    el.querySelectorAll('button[data-del]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        reviewsCache = reviewsCache.filter(r => r.id !== btn.dataset.del);
+        await setShared('reviews', reviewsCache);
+        renderTabResenas(); renderReviews();
+      });
+    });
+  }
+ 
+  // ============ Lightbox de galería ============
+  const lightboxOverlay = document.getElementById('lightboxOverlay');
+  function openLightbox(src, caption){
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxCaption').textContent = caption;
+    lightboxOverlay.classList.add('open');
+  }
+  function closeLightbox(){ lightboxOverlay.classList.remove('open'); }
+  lightboxOverlay.addEventListener('click', closeLightbox);
+  document.getElementById('lightboxClose').addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+ 
+  // ============ Animación de aparición al hacer scroll ============
+  function initReveal(){
+    const targets = document.querySelectorAll('section > .section-head, section > .services, section > .barber-feature, section > .gallery, section > .reviews-wrap, section > .booking-wrap, section > .contact-wrap');
+    targets.forEach(t => t.classList.add('reveal'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); } });
+    }, { threshold: 0.12 });
+    targets.forEach(t => io.observe(t));
+  }
+ 
+  // ============ Header transparente que se vuelve sólido al hacer scroll ============
+  const headerEl = document.querySelector('header');
+  function updateHeaderScroll(){ headerEl.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', updateHeaderScroll);
+ 
+  // ============ Inicialización ============
+  (async () => {
+    content = await loadContent();
+    contentReadyResolve();
+    renderContent();
+    await loadBookings();
+    renderSlots();
+    await renderReviews();
+    initReveal();
+    updateHeaderScroll();
+  })();
+</script>
+ 
+</body>
+</html>

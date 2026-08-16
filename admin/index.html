@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Negra Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Casa Negra Admin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check-compat.js"></script>
+<style>
+  :root{
+    --bg:#100d0a; --bg-alt:#181310; --card:#1d1712;
+    --cream:#ede7dd; --muted:#8f8879; --edge: rgba(255,255,255,.16);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--cream); font-family:'Outfit', sans-serif; line-height:1.6; min-height:100vh;}
+  h1,h2,h3{font-family:'Outfit', sans-serif; font-weight:700; letter-spacing:-.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;} button{font-family:inherit;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible{
+    outline:2px solid var(--cream); outline-offset:2px; border-radius:2px;
+  }
+
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:999px; background:transparent; color:var(--cream); font-weight:500; text-decoration:none; font-size:.9rem; border:1px solid var(--cream); cursor:pointer; transition:background 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 140ms var(--ease-out);}
+  .btn:hover{background:var(--cream); color:var(--bg);}
+  .btn:active{transform:scale(.97);}
+  .btn-outline{background:transparent; color:var(--cream); border:1px solid var(--edge);}
+  .btn-outline:hover{border-color:var(--cream); background:var(--cream); color:var(--bg);}
+  .btn-wa{border-color:#25D366; color:#25D366;}
+  .btn-wa:hover{background:#25D366; color:#0b1a10;}
+  .btn-sm{padding:9px 16px; font-size:.8rem;}
+  .btn-danger{background:transparent; border-color:rgba(224,138,138,.4); color:#e08a8a;}
+  .btn-danger:hover{background:rgba(224,138,138,.1); color:#e08a8a;}
+
+  /* ---- pantalla de login ---- */
+  #loginScreen{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .login-card{width:100%; max-width:360px; text-align:center;}
+  .login-card h1{font-size:2.2rem; letter-spacing:-.02em; margin-bottom:8px;}
+  .login-card p{color:var(--muted); font-size:.88rem; margin-bottom:26px;}
+
+  /* ---- shell de la app ---- */
+  #appShell{display:none; max-width:900px; margin:0 auto; padding:24px 20px 80px;}
+  .app-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--edge);}
+  .app-header h1{font-size:1.5rem; letter-spacing:-.02em;}
+  .admin-tabs{display:flex; gap:10px; margin-bottom:24px; border-bottom:1px solid var(--edge);}
+  .admin-tab{padding:10px 4px; color:var(--muted); cursor:pointer; font-size:.9rem; font-weight:500; border-bottom:2px solid transparent; background:none; border-top:none; border-left:none; border-right:none; transition:color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 140ms var(--ease-out);}
+  .admin-tab:hover{color:var(--cream);}
+  .admin-tab.active{color:var(--cream); border-bottom-color:var(--cream);}
+  .admin-tab:active{transform:scale(.97);}
+
+  form{display:grid; gap:18px;}
+  .field label{display:block; font-size:.82rem; color:var(--muted); margin-bottom:7px;}
+  .field input, .field select, .field textarea{width:100%; padding:12px 14px; background:var(--bg-alt); color:var(--cream); border:1px solid var(--edge); border-radius:0; font-family:inherit; font-size:.95rem; transition:border-color 180ms var(--ease-out);}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--cream);}
+  .field textarea{resize:vertical; min-height:80px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .msg{font-size:.85rem; margin-top:6px; min-height:18px;}
+  .msg.error{color:#e08a8a;} .msg.ok{color:#9fd0a0;}
+  .loading, .empty-note{color:var(--muted); font-size:.85rem; text-align:center; padding:20px;}
+
+  fieldset{border:1px solid var(--edge); padding:16px; margin-bottom:18px;}
+  legend{padding:0 8px; color:var(--cream); font-size:.85rem;}
+  .avatar-upload{display:flex; align-items:center; gap:14px; margin-top:8px;}
+  .avatar-upload .thumb-lg{width:64px; height:64px; border-radius:6px; object-fit:cover; border:1px solid var(--edge); background:var(--bg-alt);}
+  .file-btn{display:inline-flex; align-items:center; gap:6px; font-size:.75rem; padding:6px 10px; border:1px solid var(--edge); color:var(--muted); cursor:pointer; transition:border-color 180ms var(--ease-out), color 180ms var(--ease-out);}
+  .file-btn:hover{border-color:var(--cream); color:var(--cream);}
+  .file-btn input{display:none;}
+  .svc-editor-row{display:grid; grid-template-columns:1.1fr 1.5fr .6fr .6fr auto; gap:8px; margin-bottom:8px;}
+  .svc-editor-row input{padding:9px 10px; font-size:.85rem;}
+  .img-editor-row{display:grid; grid-template-columns:70px 1fr auto; gap:10px; align-items:center; margin-bottom:10px;}
+  .img-editor-row .thumb{width:70px; height:70px; border-radius:4px; object-fit:cover; border:1px solid var(--edge); background:var(--bg-alt);}
+  .img-editor-row input[type="text"]{padding:9px 10px; font-size:.85rem;}
+  .closed-days{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+  .day-toggle{padding:8px 14px; border:1px solid var(--edge); background:var(--bg-alt); color:var(--muted); font-size:.82rem; cursor:pointer; transition:border-color 180ms var(--ease-out), color 180ms var(--ease-out), background 180ms var(--ease-out), transform 140ms var(--ease-out);}
+  .day-toggle:hover{border-color:var(--cream); color:var(--cream);}
+  .day-toggle:active{transform:scale(.97);}
+  .day-toggle.closed{border-color:#e08a8a; color:#e08a8a; background:rgba(224,138,138,.1);}
+
+  .stats-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:10px; margin-bottom:20px;}
+  .stat-card{background:var(--bg-alt); border:1px solid var(--edge); padding:14px 10px; text-align:center; display:flex; flex-direction:column; gap:4px;}
+  .stat-num{font-family:'Outfit',sans-serif; font-weight:700; font-size:1.7rem; color:var(--cream); line-height:1;}
+  .stat-label{font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;}
+
+  .day-group{margin-bottom:26px;}
+  .day-header{display:flex; align-items:center; gap:10px; padding:10px 2px; margin-bottom:10px; border-bottom:1px solid var(--cream);}
+  .day-label{font-family:'Outfit',sans-serif; font-weight:500; font-size:1rem; color:var(--cream);}
+  .day-count{font-size:.72rem; color:var(--muted); font-family:'JetBrains Mono',monospace;}
+  .badge{font-size:.7rem; padding:3px 9px; border:1px solid var(--edge);}
+  .badge.pendiente{color:#ffcf6b; border-color:rgba(255,207,107,.4);}
+  .badge.confirmada{color:var(--cream); border-color:var(--cream);}
+  .badge.completada{color:#9fd0a0; border-color:rgba(159,208,160,.4);}
+  .badge.cancelada{color:#e08a8a; border-color:rgba(224,138,138,.4);}
+  .badge.full{color:#e08a8a; border-color:#e08a8a; background:rgba(224,138,138,.12); font-weight:700;}
+  .appt-row{display:grid; grid-template-columns:60px 1fr auto auto; align-items:center; gap:14px; background:var(--bg-alt); border:1px solid var(--edge); border-left:3px solid var(--edge); padding:12px 14px; margin-bottom:8px; transition:background 180ms var(--ease-out);}
+  @media (hover:hover) and (pointer:fine){ .appt-row:hover{background:color-mix(in srgb, var(--bg-alt) 80%, var(--cream) 6%);} }
+  .appt-row.status-pendiente{border-left-color:#ffcf6b;}
+  .appt-row.status-confirmada{border-left-color:var(--cream);}
+  .appt-row.status-completada{border-left-color:#9fd0a0;}
+  .appt-row.status-cancelada{border-left-color:#e08a8a; opacity:.6;}
+  .appt-time{font-family:'JetBrains Mono',monospace; font-size:.95rem; color:var(--cream); font-weight:600;}
+  .appt-info{min-width:0;}
+  .appt-name{font-size:.92rem; margin-bottom:3px;}
+  .appt-meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:.75rem; color:var(--muted);}
+  .appt-tag{border:1px solid var(--edge); padding:2px 8px; font-size:.7rem; color:var(--cream);}
+  .appt-row .actions{display:flex; gap:6px; margin:0;}
+  @media (max-width:600px){ .appt-row{grid-template-columns:1fr; gap:8px;} .appt-row .actions{flex-wrap:wrap;} }
+
+  .admin-row{background:var(--bg-alt); border:1px solid var(--edge); padding:14px; margin-bottom:10px; font-size:.85rem; transition:background 180ms var(--ease-out);}
+  @media (hover:hover) and (pointer:fine){ .admin-row:hover{background:color-mix(in srgb, var(--bg-alt) 80%, var(--cream) 6%);} }
+  .admin-row .top-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .admin-row .actions{display:flex; gap:8px; margin-top:10px;}
+  .stars{color:var(--cream);}
+
+  .slots{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:6px;}
+  .slot{padding:10px 0; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.85rem; border:1px solid var(--edge); background:var(--bg-alt); cursor:pointer; transition:border-color 150ms var(--ease-out), background 150ms var(--ease-out), transform 140ms var(--ease-out);}
+  .slot:hover{border-color:var(--cream);}
+  .slot:active{transform:scale(.97);}
+  .slot.selected{background:var(--cream); color:var(--bg); border-color:var(--cream); font-weight:600;}
+  .slot.disabled{opacity:.3; cursor:not-allowed; text-decoration:line-through;}
+
+  @media (max-width:600px){
+    .row2, .svc-editor-row{grid-template-columns:1fr;}
+    .img-editor-row{grid-template-columns:56px 1fr; row-gap:8px;}
+    .img-editor-row .thumb{width:56px; height:56px;}
+    .img-editor-row button{grid-column:2; justify-self:start;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Casa Negra Admin</h1>
+    <p>Panel del dueño. Inicia sesión con tu cuenta.</p>
+    <div class="field"><input type="email" id="adminEmail" placeholder="Correo" autocomplete="username"></div>
+    <div class="field" style="margin-top:10px;"><input type="password" id="adminPass" placeholder="Contraseña" autocomplete="current-password"></div>
+    <button class="btn" id="adminLoginBtn" style="margin-top:12px; width:100%; justify-content:center;">Entrar</button>
+    <div class="msg error" id="adminLoginMsg"></div>
+    <div class="msg" id="adminLoginStatus" style="color:var(--muted);"></div>
+  </div>
+</div>
+
+<div id="appShell">
+  <div class="app-header">
+    <h1>Casa Negra Admin</h1>
+    <button class="btn btn-sm btn-outline" id="logoutBtn">Salir</button>
+  </div>
+  <div class="admin-tabs">
+    <button type="button" class="admin-tab active" data-tab="contenido">Contenido</button>
+    <button type="button" class="admin-tab" data-tab="citas">Citas</button>
+    <button type="button" class="admin-tab" data-tab="resenas">Reseñas</button>
+  </div>
+  <div id="tabContenido"></div>
+  <div id="tabCitas" style="display:none;"></div>
+  <div id="tabResenas" style="display:none;"></div>
+</div>
+
+<script>
+  // ============ Firebase (Auth + Firestore REST) ============
+  const FIREBASE_PROJECT_ID = "navaja-dorada-e6a0d";
+  const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/default/documents/site_data`;
+  const FIRESTORE_ROOT = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/default/documents`;
+
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDiLO2ikdGUcKwJH2nGwrquU_9uWn7a9XM",
+    authDomain: "navaja-dorada-e6a0d.firebaseapp.com",
+    projectId: "navaja-dorada-e6a0d",
+    storageBucket: "navaja-dorada-e6a0d.firebasestorage.app",
+    messagingSenderId: "741596424652",
+    appId: "1:741596424652:web:a9bd42c1dd0ed42c6f9569"
+  };
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const auth = firebase.auth();
+
+  // ============ App Check (reCAPTCHA v3) — todavía "Sin aplicar" en Firestore ============
+  const RECAPTCHA_V3_SITE_KEY = "6LeiAIgtAAAAADRNrIZFUhiSA0tYB9ANNmfbrY3Y";
+  const appCheck = firebase.appCheck();
+  appCheck.activate(new firebase.appCheck.ReCaptchaV3Provider(RECAPTCHA_V3_SITE_KEY), true);
+  // Igual que en el sitio público: usamos fetch() directo a la API REST, así que el
+  // token de App Check hay que pedirlo y mandarlo a mano en cada petición.
+  async function appCheckHeader(){
+    try{
+      const { token } = await appCheck.getToken();
+      return { 'X-Firebase-AppCheck': token };
+    }catch(e){ console.warn('[AppCheck] No se pudo obtener el token', e); return {}; }
+  }
+
+  // Token de la cuenta con sesión iniciada, para mandarlo en cada llamada a Firestore
+  // (necesario en cuanto las Reglas de seguridad exijan autenticación real).
+  async function authHeader(){
+    const user = auth.currentUser;
+    if(!user) return {};
+    const token = await user.getIdToken();
+    return { 'Authorization': `Bearer ${token}` };
+  }
+
+  // Verifica que la cuenta con sesión iniciada esté autorizada como admin
+  // (existe un documento admin_users/{uid} — ver Fase B).
+  // Devuelve un estado, no un booleano: un 403 (bloqueado por las Reglas de Firestore,
+  // que todavía no permiten esta lectura) NO es lo mismo que un 404 (el documento
+  // genuinamente no existe) — tratarlos igual fue el bug que hizo cerrar sesión sin
+  // motivo real. Errores de red/timeout se dejan propagar (los maneja el llamador).
+  async function checkIsAdmin(uid){
+    const res = await fetchWithTimeout(`${FIRESTORE_ROOT}/admin_users/${uid}`, { headers: { ...(await authHeader()), ...(await appCheckHeader()) } }, 10000);
+    if(res.status === 200) return 'admin';
+    if(res.status === 404) return 'not-admin';
+    if(res.status === 403) return 'blocked-by-rules';
+    throw new Error(`Respuesta inesperada de Firestore: HTTP ${res.status}`);
+  }
+
+  function fetchWithTimeout(url, options, ms){
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+  }
+
+  async function getShared(key, fallback){
+    try{
+      const res = await fetchWithTimeout(`${FIRESTORE_BASE}/${key}`, { headers: { ...(await authHeader()), ...(await appCheckHeader()) } }, 12000);
+      if(res.status === 404){ return fallback; }
+      if(!res.ok){ throw new Error(`HTTP ${res.status}`); }
+      const data = await res.json();
+      const raw = data && data.fields && data.fields.value && data.fields.value.stringValue;
+      if(raw === undefined) return fallback;
+      const parsed = JSON.parse(raw);
+      return (parsed === null || parsed === undefined) ? fallback : parsed;
+    }catch(e){ console.error(`[Firestore] Error leyendo "${key}"`, e); return fallback; }
+  }
+
+  async function setShared(key, value){
+    if(value === null || value === undefined){
+      console.error('Se intentó guardar un valor vacío en', key, '— cancelado para evitar corromper los datos.');
+      throw new Error('Valor vacío, no se guardó nada.');
+    }
+    const payload = JSON.stringify(value);
+    const fields = { value: { stringValue: payload } };
+    const res = await fetchWithTimeout(`${FIRESTORE_BASE}/${key}?updateMask.fieldPaths=value`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', ...(await authHeader()), ...(await appCheckHeader()) },
+      body: JSON.stringify({ fields })
+    }, 15000);
+    if(!res.ok){ const errBody = await res.text(); throw new Error(`HTTP ${res.status}: ${errBody}`); }
+  }
+
+  // Fotos propias por tarjeta de contacto (opcional). Mismo modelo que el sitio público.
+  const CONTACT_CARDS = [
+    { key:'phone', label:'Teléfono (Llamar a la barbería)' },
+    { key:'whatsapp', label:'WhatsApp (Escríbenos directo)' },
+    { key:'instagram', label:'Instagram (Ver perfil)' },
+    { key:'facebook', label:'Facebook (Ver página)' },
+    { key:'email', label:'Correo (Correo de contacto)' }
+  ];
+
+  const DEFAULT_CONTENT = {
+    shopName: 'La Navaja Dorada',
+    theme: { bg:'#100d0a', bgAlt:'#181310', gold:'#c9a15a', burgundy:'#7a2f3d', cream:'#ede7dd' },
+    contactCardPhotos: { phone:null, whatsapp:null, instagram:null, facebook:null, email:null },
+    statsCount: 500,
+    closedDays: [0],
+    pageTitle: 'La Navaja Dorada — Barbería',
+    pageDescription: 'Reserva tu cita en La Navaja Dorada. Cortes clásicos, fade de precisión y arreglo de barba con navaja.',
+    heroTitle: 'Cada corte se afila\ncon el mismo cuidado.',
+    heroSubtitle: 'Cortes clásicos, fade de precisión y arreglo de barba con navaja. Reserva tu turno en menos de un minuto.',
+    barberName: 'Rubén Alvarado',
+    barberSpecialty: 'Fade, diseño y navaja clásica',
+    barberBio: 'Más de 12 años de experiencia perfeccionando cortes clásicos y modernos, con especial atención al detalle en cada barba y acabado a navaja.',
+    services: [
+      {name:'Corte clásico', desc:'Tijera y máquina, acabado con navaja', price:180, slots:1},
+      {name:'Fade / degradado', desc:'Alta precisión, líneas marcadas', price:220, slots:1},
+      {name:'Arreglo de barba', desc:'Perfilado y navaja', price:150, slots:1},
+      {name:'Corte + barba', desc:'El paquete completo', price:320, slots:2},
+      {name:'Afeitado clásico', desc:'Navaja, toalla caliente, aceites', price:200, slots:1},
+      {name:'Corte niño', desc:'Hasta 12 años', price:130, slots:1}
+    ],
+    address:'Av. Insurgentes Sur 1234, Col. Del Valle, CDMX',
+    phone:'+52 55 1234 5678',
+    hours:'Lun–Sáb, 10:00–20:00 · Dom cerrado',
+    hoursWeekday:'', hoursSaturday:'', hoursSunday:'',
+    email:'hola@lanavajadorada.mx',
+    whatsapp:'525512345678',
+    facebookUrl:'',
+    instagramUrl:'',
+    waMessage:'Hola 👋, me gustaría agendar una cita en *{shop}* 💈✨. ¿Me podrían confirmar la disponibilidad?',
+    barberPhoto:null,
+    heroBackground:null,
+    gallery:[
+      {caption:'Fade clásico', image:null, beforeImage:null},
+      {caption:'Barba tallada', image:null, beforeImage:null},
+      {caption:'Pompadour', image:null, beforeImage:null},
+      {caption:'Afeitado a navaja', image:null, beforeImage:null},
+      {caption:'Corte texturizado', image:null, beforeImage:null},
+      {caption:'Fade + diseño', image:null, beforeImage:null},
+      {caption:'Corte niño', image:null, beforeImage:null},
+      {caption:'Barba + bigote', image:null, beforeImage:null}
+    ]
+  };
+
+  // Reduce y comprime una imagen antes de guardarla (las fotos se guardan como texto base64)
+  function resizeImageFile(file, maxWidth=760, quality=0.72){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  let content = null;
+  let mediaDirty = false;
+
+  function mergeContent(textPart, mediaPart){
+    const t = textPart || {};
+    const m = mediaPart || {};
+    const baseGallery = t.gallery || DEFAULT_CONTENT.gallery;
+    const galleryImages = m.galleryImages || baseGallery.map(g => g.image || null);
+    const galleryBeforeImages = m.galleryBeforeImages || baseGallery.map(g => g.beforeImage || null);
+    const gallery = baseGallery.map((g, i) => ({ caption: g.caption, image: galleryImages[i] || null, beforeImage: galleryBeforeImages[i] || null }));
+    return {
+      ...DEFAULT_CONTENT,
+      ...t,
+      gallery,
+      barberPhoto: (m.barberPhoto !== undefined ? m.barberPhoto : t.barberPhoto) || null,
+      heroBackground: (m.heroBackground !== undefined ? m.heroBackground : t.heroBackground) || null,
+      contactCardPhotos: { ...DEFAULT_CONTENT.contactCardPhotos, ...(m.contactCardPhotos || {}) }
+    };
+  }
+
+  async function loadContent(){
+    const [textPart, mediaPart] = await Promise.all([
+      getShared('siteContent', null),
+      getShared('siteMedia', null)
+    ]);
+    return mergeContent(textPart, mediaPart);
+  }
+
+  async function saveContent(c){
+    const textPart = { ...c, gallery: c.gallery.map(g => ({ caption: g.caption })) };
+    delete textPart.barberPhoto;
+    delete textPart.heroBackground;
+    delete textPart.contactCardPhotos;
+    const tasks = [ setShared('siteContent', textPart) ];
+    if(mediaDirty){
+      const mediaPart = { barberPhoto: c.barberPhoto, heroBackground: c.heroBackground, contactCardPhotos: c.contactCardPhotos, galleryImages: c.gallery.map(g => g.image), galleryBeforeImages: c.gallery.map(g => g.beforeImage) };
+      tasks.push(setShared('siteMedia', mediaPart));
+    }
+    await Promise.all(tasks);
+    mediaDirty = false;
+  }
+
+  // ============ Citas: mismos cálculos de horarios que el sitio público ============
+  function formatTime12(t){
+    if(!t) return t;
+    const [h, m] = t.split(':').map(Number);
+    const period = h < 12 ? 'a.m.' : 'p.m.';
+    let h12 = h % 12;
+    if(h12 === 0) h12 = 12;
+    return `${h12}:${String(m).padStart(2,'0')} ${period}`;
+  }
+  const allSlots = ['10:00','10:45','11:30','12:15','13:00','13:45','14:30','15:15','16:00','16:45','17:30','18:15','19:00','19:45','20:30'];
+  let bookingsCache = [];
+  async function loadBookings(){ bookingsCache = await getShared('bookings', []); }
+  let waitlistCache = [];
+  async function loadWaitlist(){ waitlistCache = await getShared('waitlist', []); }
+
+  function getServiceSlots(serviceName){
+    const svc = content.services.find(s => s.name === serviceName);
+    return (svc && svc.slots) || 1;
+  }
+  function occupiedTimesOf(b){
+    const idx = allSlots.indexOf(b.time);
+    if(idx === -1) return [b.time];
+    return allSlots.slice(idx, idx + (b.slotsUsed || 1));
+  }
+  function isTimeOccupied(chosenDate, time){
+    return bookingsCache.some(b => b.date === chosenDate && b.status !== 'cancelada' && occupiedTimesOf(b).includes(time));
+  }
+  function hasRoomFrom(chosenDate, startIdx, needed){
+    if(startIdx + needed > allSlots.length) return false;
+    for(let i = startIdx; i < startIdx + needed; i++){
+      if(isTimeOccupied(chosenDate, allSlots[i])) return false;
+    }
+    return true;
+  }
+  function buildClientNotificationWaLink(name, phone, service, date, time){
+    const msg = `¡Hola ${name}! 👋 Tu cita en *${content.shopName}* quedó confirmada:\n\n💈 Servicio: ${service}\n📅 Fecha: ${date}\n🕒 Hora: ${formatTime12(time)}\n📍 ${content.address}\n\n¡Te esperamos! 🙌`;
+    return 'https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg);
+  }
+  function formatDayLabel(dateStr){
+    const d = new Date(dateStr + 'T00:00');
+    if(isNaN(d)) return dateStr;
+    const label = d.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  // ============ Reseñas ============
+  function starString(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
+  let reviewsCache = [];
+  async function loadReviews(){
+    reviewsCache = await getShared('reviews', [
+      {id:'seed1', name:'Marco A.', stars:5, comment:'Excelente atención, el fade quedó perfecto.', date:'2026-06-20'},
+      {id:'seed2', name:'Diego R.', stars:5, comment:'Un artista con la navaja.', date:'2026-06-15'},
+      {id:'seed3', name:'Luis F.', stars:4, comment:'Muy buen servicio, un poco de espera.', date:'2026-06-10'}
+    ]);
+  }
+
+  // ============ Pestaña Contenido ============
+  function renderTabContenido(){
+    const el = document.getElementById('tabContenido');
+    el.innerHTML = `
+      <fieldset><legend>Negocio</legend>
+        <div class="field"><label>Nombre del negocio</label><input id="edShopName" value="${content.shopName}"></div>
+        <div class="field"><label>Cortes realizados (número que se muestra junto a la calificación, déjalo en 0 para ocultarlo)</label><input id="edStatsCount" type="number" min="0" value="${content.statsCount || 0}"></div>
+        <div class="field"><label>Título de la pestaña del navegador (SEO)</label><input id="edPageTitle" value="${content.pageTitle || ''}" placeholder="Ej. La Navaja Dorada — Barbería"></div>
+        <div class="field"><label>Descripción para buscadores como Google (SEO)</label><textarea id="edPageDescription" placeholder="Una o dos frases que describan tu barbería">${content.pageDescription || ''}</textarea></div>
+        <div class="field"><label>Título del hero</label><textarea id="edHeroTitle">${content.heroTitle}</textarea></div>
+        <div class="field"><label>Subtítulo del hero</label><textarea id="edHeroSubtitle">${content.heroSubtitle}</textarea></div>
+        <div class="field">
+          <label>Imagen de fondo del hero (opcional)</label>
+          <div class="avatar-upload">
+            <img class="thumb-lg" id="heroBgPreview" src="${content.heroBackground || ''}" style="${content.heroBackground ? '' : 'display:none;'}">
+            <div>
+              <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" id="heroBgInput" accept="image/*"></label>
+              <button type="button" class="btn btn-sm btn-danger" id="removeHeroBgBtn" style="margin-top:6px; ${content.heroBackground ? '' : 'display:none;'}">Quitar foto de fondo</button>
+            </div>
+          </div>
+          <div class="msg" id="heroBgMsg"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Barbero</legend>
+        <div class="field"><label>Nombre</label><input id="edBarberName" value="${content.barberName}"></div>
+        <div class="field"><label>Especialidad</label><input id="edBarberSpecialty" value="${content.barberSpecialty}"></div>
+        <div class="field"><label>Biografía</label><textarea id="edBarberBio">${content.barberBio}</textarea></div>
+        <div class="field">
+          <label>Foto del barbero</label>
+          <div class="avatar-upload">
+            <img class="thumb-lg" id="barberPhotoPreview" src="${content.barberPhoto || ''}" style="${content.barberPhoto ? '' : 'display:none;'}">
+            <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" id="barberPhotoInput" accept="image/*"></label>
+          </div>
+          <div class="msg" id="barberPhotoMsg"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Fotos de las tarjetas de contacto</legend>
+        <p style="color:var(--muted); font-size:.82rem; margin:-4px 0 14px;">Opcional. Si no subes una foto para una tarjeta, se usa automáticamente una foto de tu galería.</p>
+        ${CONTACT_CARDS.map(({key, label}) => {
+          const photo = content.contactCardPhotos && content.contactCardPhotos[key];
+          return `
+        <div class="field">
+          <label>${label}</label>
+          <div class="avatar-upload">
+            <img class="thumb-lg" id="ccPhoto_${key}_preview" src="${photo || ''}" style="${photo ? '' : 'display:none;'}">
+            <div>
+              <label class="file-btn"><i class="fa-solid fa-upload"></i> Subir foto<input type="file" id="ccPhoto_${key}_input" accept="image/*"></label>
+              <button type="button" class="btn btn-sm btn-danger" id="ccPhoto_${key}_remove" style="margin-top:6px; ${photo ? '' : 'display:none;'}">Quitar foto</button>
+            </div>
+          </div>
+          <div class="msg" id="ccPhoto_${key}_msg"></div>
+        </div>`;
+        }).join('')}
+      </fieldset>
+      <fieldset><legend>Servicios</legend>
+        <div id="svcEditor"></div>
+        <button type="button" class="btn btn-sm btn-outline" id="addSvcBtn">+ Agregar servicio</button>
+      </fieldset>
+      <fieldset><legend>Galería (fotos de cortes)</legend>
+        <div id="galEditor"></div>
+        <button type="button" class="btn btn-sm btn-outline" id="addGalBtn">+ Agregar foto</button>
+      </fieldset>
+      <fieldset><legend>Contacto y redes</legend>
+        <div class="field"><label>Dirección</label><input id="edAddress" value="${content.address}"></div>
+        <div class="row2">
+          <div class="field"><label>Teléfono mostrado</label><input id="edPhone" value="${content.phone}"></div>
+          <div class="field"><label>WhatsApp (solo números, con código de país)</label><input id="edWhatsapp" value="${content.whatsapp}"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Horario (texto libre — se muestra si dejas vacíos los 3 campos de abajo)</label><input id="edHours" value="${content.hours}"></div>
+          <div class="field"><label>Email</label><input id="edEmail" value="${content.email}"></div>
+        </div>
+        <div class="field">
+          <label>Horario en columnas (opcional — llena los 3 para mostrar Lunes a viernes / Sábado / Domingo por separado, en vez del texto libre de arriba)</label>
+        </div>
+        <div class="svc-editor-row" style="grid-template-columns:1fr 1fr 1fr;">
+          <input id="edHoursWeekday" value="${content.hoursWeekday||''}" placeholder="Lunes a viernes: ej. 10:00 am – 8:00 pm">
+          <input id="edHoursSaturday" value="${content.hoursSaturday||''}" placeholder="Sábado: ej. 10:00 am – 7:00 pm">
+          <input id="edHoursSunday" value="${content.hoursSunday||''}" placeholder="Domingo: ej. Cerrado">
+        </div>
+        <div class="field">
+          <label>Días que NO se pueden agendar citas</label>
+          <div class="closed-days" id="closedDaysWrap"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Link de Facebook</label><input id="edFacebook" value="${content.facebookUrl || ''}" placeholder="https://facebook.com/tu-pagina"></div>
+          <div class="field"><label>Link de Instagram</label><input id="edInstagram" value="${content.instagramUrl || ''}" placeholder="https://instagram.com/tu-cuenta"></div>
+        </div>
+        <div class="field">
+          <label>Mensaje que se prellena al escribir por WhatsApp (usa {shop} para el nombre del negocio)</label>
+          <textarea id="edWaMessage">${content.waMessage || DEFAULT_CONTENT.waMessage}</textarea>
+        </div>
+      </fieldset>
+      <button class="btn" id="saveContentBtn">Guardar cambios</button>
+      <div class="msg" id="saveContentMsg"></div>`;
+
+    document.getElementById('heroBgInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const msg = document.getElementById('heroBgMsg');
+      msg.textContent = 'Procesando imagen...';
+      try{
+        const dataUrl = await resizeImageFile(file, 1000, 0.6);
+        content.heroBackground = dataUrl;
+        mediaDirty = true;
+        const preview = document.getElementById('heroBgPreview');
+        preview.src = dataUrl; preview.style.display = 'block';
+        document.getElementById('removeHeroBgBtn').style.display = 'inline-flex';
+        msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
+      }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
+    });
+    document.getElementById('removeHeroBgBtn').addEventListener('click', () => {
+      content.heroBackground = null;
+      mediaDirty = true;
+      document.getElementById('heroBgPreview').style.display = 'none';
+      document.getElementById('removeHeroBgBtn').style.display = 'none';
+      document.getElementById('heroBgMsg').textContent = 'Se quitará al guardar cambios.';
+    });
+    document.getElementById('barberPhotoInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const msg = document.getElementById('barberPhotoMsg');
+      msg.textContent = 'Procesando imagen...';
+      try{
+        const dataUrl = await resizeImageFile(file, 400, 0.7);
+        content.barberPhoto = dataUrl;
+        mediaDirty = true;
+        const preview = document.getElementById('barberPhotoPreview');
+        preview.src = dataUrl; preview.style.display = 'block';
+        msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
+      }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
+    });
+
+    CONTACT_CARDS.forEach(({key}) => {
+      document.getElementById(`ccPhoto_${key}_input`).addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const msg = document.getElementById(`ccPhoto_${key}_msg`);
+        msg.textContent = 'Procesando imagen...';
+        try{
+          const dataUrl = await resizeImageFile(file, 800, 0.65);
+          content.contactCardPhotos[key] = dataUrl;
+          mediaDirty = true;
+          const preview = document.getElementById(`ccPhoto_${key}_preview`);
+          preview.src = dataUrl; preview.style.display = 'block';
+          document.getElementById(`ccPhoto_${key}_remove`).style.display = 'inline-flex';
+          msg.className='msg ok'; msg.textContent = 'Foto lista. Recuerda pulsar "Guardar cambios".';
+        }catch(err){ msg.className='msg error'; msg.textContent = 'No se pudo procesar la imagen.'; }
+      });
+      document.getElementById(`ccPhoto_${key}_remove`).addEventListener('click', () => {
+        content.contactCardPhotos[key] = null;
+        mediaDirty = true;
+        document.getElementById(`ccPhoto_${key}_preview`).style.display = 'none';
+        document.getElementById(`ccPhoto_${key}_remove`).style.display = 'none';
+        document.getElementById(`ccPhoto_${key}_msg`).textContent = 'Se quitará al guardar cambios.';
+      });
+    });
+
+    const DAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    function renderClosedDays(){
+      const wrap = document.getElementById('closedDaysWrap');
+      wrap.innerHTML = '';
+      if(!content.closedDays) content.closedDays = [];
+      DAY_NAMES.forEach((label, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isClosed = content.closedDays.includes(i);
+        btn.className = 'day-toggle' + (isClosed ? ' closed' : '');
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+          if(content.closedDays.includes(i)) content.closedDays = content.closedDays.filter(d => d !== i);
+          else content.closedDays.push(i);
+          renderClosedDays();
+        });
+        wrap.appendChild(btn);
+      });
+    }
+    renderClosedDays();
+
+    function renderSvcRows(){
+      const wrap = document.getElementById('svcEditor');
+      wrap.innerHTML = '';
+      content.services.forEach((s, i) => {
+        const row = document.createElement('div');
+        row.className = 'svc-editor-row';
+        row.innerHTML = `
+          <input data-i="${i}" data-f="name" value="${s.name}" placeholder="Nombre">
+          <input data-i="${i}" data-f="desc" value="${s.desc}" placeholder="Descripción">
+          <input data-i="${i}" data-f="price" type="number" value="${s.price}" placeholder="Precio">
+          <input data-i="${i}" data-f="slots" type="number" min="1" max="4" value="${s.slots || 1}" title="Turnos de 45 min que ocupa" placeholder="Turnos">
+          <button type="button" class="btn btn-sm btn-danger" data-remove="${i}"><i class="fa-solid fa-trash"></i></button>`;
+        wrap.appendChild(row);
+      });
+      wrap.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const i = parseInt(inp.dataset.i); const f = inp.dataset.f;
+          content.services[i][f] = (f === 'price' || f === 'slots') ? (parseInt(inp.value)||1) : inp.value;
+        });
+      });
+      wrap.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => { content.services.splice(parseInt(btn.dataset.remove),1); renderSvcRows(); });
+      });
+    }
+    renderSvcRows();
+    document.getElementById('addSvcBtn').addEventListener('click', () => {
+      content.services.push({name:'Nuevo servicio', desc:'', price:0, slots:1}); renderSvcRows();
+    });
+
+    function renderGalRows(){
+      const wrap = document.getElementById('galEditor');
+      wrap.innerHTML = '';
+      content.gallery.forEach((g, i) => {
+        const row = document.createElement('div');
+        row.className = 'img-editor-row';
+        row.innerHTML = `
+          <img class="thumb" src="${g.image || ''}" style="${g.image ? '' : 'background:var(--bg-alt);'}">
+          <div>
+            <input type="text" data-i="${i}" data-f="caption" value="${g.caption}" placeholder="Descripción (ej. Fade clásico)">
+            <label class="file-btn"><i class="fa-solid fa-upload"></i> Foto "después"<input type="file" accept="image/*" data-i="${i}" class="galFileInput"></label>
+            <label class="file-btn"><i class="fa-solid fa-upload"></i> Foto "antes" (opcional, activa el comparador)<input type="file" accept="image/*" data-i="${i}" class="galBeforeInput"></label>
+            ${g.beforeImage ? `<button type="button" class="btn btn-sm btn-danger" data-clear-before="${i}" style="margin-top:4px;">Quitar foto de antes</button>` : ''}
+            <div class="msg" data-gmsg="${i}"></div>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger" data-remove="${i}"><i class="fa-solid fa-trash"></i></button>`;
+        wrap.appendChild(row);
+      });
+      wrap.querySelectorAll('input[type="text"]').forEach(inp => {
+        inp.addEventListener('input', () => { content.gallery[parseInt(inp.dataset.i)].caption = inp.value; });
+      });
+      wrap.querySelectorAll('.galFileInput').forEach(inp => {
+        inp.addEventListener('change', async (e) => {
+          const i = parseInt(inp.dataset.i);
+          const file = e.target.files[0];
+          if(!file) return;
+          const msgEl = wrap.querySelector(`[data-gmsg="${i}"]`);
+          msgEl.textContent = 'Procesando imagen...';
+          try{
+            const dataUrl = await resizeImageFile(file, 550, 0.65);
+            content.gallery[i].image = dataUrl;
+            mediaDirty = true;
+            renderGalRows();
+          }catch(err){ msgEl.className='msg error'; msgEl.textContent = 'No se pudo procesar la imagen.'; }
+        });
+      });
+      wrap.querySelectorAll('.galBeforeInput').forEach(inp => {
+        inp.addEventListener('change', async (e) => {
+          const i = parseInt(inp.dataset.i);
+          const file = e.target.files[0];
+          if(!file) return;
+          const msgEl = wrap.querySelector(`[data-gmsg="${i}"]`);
+          msgEl.textContent = 'Procesando imagen...';
+          try{
+            const dataUrl = await resizeImageFile(file, 550, 0.65);
+            content.gallery[i].beforeImage = dataUrl;
+            mediaDirty = true;
+            renderGalRows();
+          }catch(err){ msgEl.className='msg error'; msgEl.textContent = 'No se pudo procesar la imagen.'; }
+        });
+      });
+      wrap.querySelectorAll('button[data-clear-before]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          content.gallery[parseInt(btn.dataset.clearBefore)].beforeImage = null;
+          mediaDirty = true;
+          renderGalRows();
+        });
+      });
+      wrap.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => { content.gallery.splice(parseInt(btn.dataset.remove),1); mediaDirty = true; renderGalRows(); });
+      });
+    }
+    renderGalRows();
+    document.getElementById('addGalBtn').addEventListener('click', () => {
+      content.gallery.push({caption:'Nueva foto', image:null}); mediaDirty = true; renderGalRows();
+    });
+
+    document.getElementById('saveContentBtn').addEventListener('click', async () => {
+      content.shopName = document.getElementById('edShopName').value;
+      content.pageTitle = document.getElementById('edPageTitle').value;
+      content.statsCount = parseInt(document.getElementById('edStatsCount').value) || 0;
+      content.pageDescription = document.getElementById('edPageDescription').value;
+      content.heroTitle = document.getElementById('edHeroTitle').value;
+      content.heroSubtitle = document.getElementById('edHeroSubtitle').value;
+      content.barberName = document.getElementById('edBarberName').value;
+      content.barberSpecialty = document.getElementById('edBarberSpecialty').value;
+      content.barberBio = document.getElementById('edBarberBio').value;
+      content.address = document.getElementById('edAddress').value;
+      content.phone = document.getElementById('edPhone').value;
+      content.whatsapp = document.getElementById('edWhatsapp').value;
+      content.hours = document.getElementById('edHours').value;
+      content.hoursWeekday = document.getElementById('edHoursWeekday').value;
+      content.hoursSaturday = document.getElementById('edHoursSaturday').value;
+      content.hoursSunday = document.getElementById('edHoursSunday').value;
+      content.email = document.getElementById('edEmail').value;
+      content.facebookUrl = document.getElementById('edFacebook').value;
+      content.instagramUrl = document.getElementById('edInstagram').value;
+      content.waMessage = document.getElementById('edWaMessage').value;
+      const msg = document.getElementById('saveContentMsg');
+      msg.className='msg'; msg.textContent='Guardando...';
+      const tSave0 = performance.now();
+      try{
+        await saveContent(content);
+        const secs = ((performance.now()-tSave0)/1000).toFixed(1);
+        msg.className='msg ok'; msg.textContent=`Cambios guardados y publicados (${secs}s).`;
+      }catch(err){
+        msg.className='msg error';
+        msg.textContent = 'No se pudo guardar. Revisa que la base de datos de Firebase esté creada y con reglas que permitan escribir. Detalle: ' + (err && err.message ? err.message : err);
+      }
+    });
+  }
+
+  // ============ Pestaña Citas ============
+  function renderTabCitas(){
+    const el = document.getElementById('tabCitas');
+
+    let html = `
+      <button type="button" class="btn btn-sm" id="manualAddBtn" style="margin-bottom:16px;"><i class="fa-solid fa-plus"></i> Agendar cita manual</button>
+      <div id="manualAddForm" style="display:none;"></div>`;
+
+    if(!bookingsCache.length && !waitlistCache.length){
+      html += '<div class="empty-note">Aún no hay citas reservadas.</div>';
+      el.innerHTML = html;
+      wireManualAddButton();
+      return;
+    }
+
+    if(bookingsCache.length){
+      const activos = bookingsCache.filter(b => b.status !== 'cancelada');
+      const pendientes = bookingsCache.filter(b => b.status === 'pendiente').length;
+      const confirmadas = bookingsCache.filter(b => b.status === 'confirmada').length;
+      const todayStr = new Date().toISOString().split('T')[0];
+      const hoy = activos.filter(b => b.date === todayStr).length;
+      const completadas = bookingsCache.filter(b => b.status === 'completada');
+      const ingresos = completadas.reduce((sum, b) => {
+        const svc = content.services.find(s => s.name === b.service);
+        return sum + (svc ? svc.price : 0);
+      }, 0);
+      html += `
+        <div class="stats-row">
+          <div class="stat-card"><span class="stat-num">${activos.length}</span><span class="stat-label">Citas activas</span></div>
+          <div class="stat-card"><span class="stat-num">${pendientes}</span><span class="stat-label">Pendientes</span></div>
+          <div class="stat-card"><span class="stat-num">${confirmadas}</span><span class="stat-label">Confirmadas</span></div>
+          <div class="stat-card"><span class="stat-num">${hoy}</span><span class="stat-label">Hoy</span></div>
+          <div class="stat-card"><span class="stat-num">$${ingresos}</span><span class="stat-label">Ingresos (completadas)</span></div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline" id="exportCsvBtn" style="margin-bottom:20px;"><i class="fa-solid fa-file-arrow-down"></i> Descargar citas (Excel/CSV)</button>
+        <div id="dayGroupsWrap"></div>`;
+    }
+    if(waitlistCache.length){
+      html += `<div class="day-group"><div class="day-header"><span class="day-label">Lista de espera</span><span class="day-count">${waitlistCache.length} persona${waitlistCache.length===1?'':'s'}</span></div><div id="waitlistWrap"></div></div>`;
+    }
+    el.innerHTML = html;
+    wireManualAddButton();
+
+    const dates = [...new Set(bookingsCache.map(b => b.date))].sort();
+    const wrap = document.getElementById('dayGroupsWrap');
+    dates.forEach(date => {
+      const dayFull = allSlots.every(t => isTimeOccupied(date, t));
+      const dayBookings = bookingsCache.filter(b => b.date === date).sort((a,b) => a.time.localeCompare(b.time));
+      const activeCount = dayBookings.filter(b => b.status !== 'cancelada').length;
+
+      const group = document.createElement('div');
+      group.className = 'day-group';
+      group.innerHTML = `
+        <div class="day-header">
+          <span class="day-label">${formatDayLabel(date)}</span>
+          <span class="day-count">${activeCount} cita${activeCount === 1 ? '' : 's'}</span>
+          ${dayFull ? '<span class="badge full">LLENO</span>' : ''}
+        </div>`;
+
+      dayBookings.forEach(b => {
+        let actions = '';
+        if(b.status === 'pendiente'){
+          actions = `
+            <button class="btn btn-sm" data-act="confirmar" data-id="${b.id}"><i class="fa-solid fa-check"></i> Confirmar</button>
+            <button class="btn btn-sm btn-danger" data-act="cancelar" data-id="${b.id}"><i class="fa-solid fa-xmark"></i></button>`;
+        }else if(b.status === 'confirmada'){
+          actions = `
+            <button class="btn btn-sm" data-act="completar" data-id="${b.id}"><i class="fa-solid fa-flag-checkered"></i> Completada</button>
+            <button class="btn btn-sm btn-danger" data-act="cancelar" data-id="${b.id}"><i class="fa-solid fa-xmark"></i></button>`;
+        }else{
+          actions = `<button class="btn btn-sm btn-danger" data-act="eliminar" data-id="${b.id}"><i class="fa-solid fa-trash"></i> Eliminar</button>`;
+        }
+        const row = document.createElement('div');
+        row.className = 'appt-row status-' + b.status;
+        row.innerHTML = `
+          <div class="appt-time">${formatTime12(b.time)}</div>
+          <div class="appt-info">
+            <div class="appt-name">${b.name}</div>
+            <div class="appt-meta"><span class="appt-tag">${b.service}</span><span class="mono">${b.phone}</span></div>
+          </div>
+          <span class="badge ${b.status}">${b.status}</span>
+          <div class="actions">${actions}</div>`;
+        group.appendChild(row);
+      });
+      wrap.appendChild(group);
+    });
+
+    const wlWrap = document.getElementById('waitlistWrap');
+    if(wlWrap){
+      waitlistCache.slice().sort((a,b) => a.date.localeCompare(b.date)).forEach(w => {
+        const row = document.createElement('div');
+        row.className = 'appt-row';
+        const waLink = 'https://wa.me/' + w.phone.replace(/\D/g,'');
+        row.innerHTML = `
+          <div class="appt-time mono">${w.date}</div>
+          <div class="appt-info">
+            <div class="appt-name">${w.name}</div>
+            <div class="appt-meta"><span class="mono">${w.phone}</span></div>
+          </div>
+          <div class="actions">
+            <a class="btn btn-sm btn-wa" href="${waLink}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            <button class="btn btn-sm btn-danger" data-wl-remove="${w.id}"><i class="fa-solid fa-trash"></i></button>
+          </div>`;
+        wlWrap.appendChild(row);
+      });
+      wlWrap.querySelectorAll('button[data-wl-remove]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          waitlistCache = waitlistCache.filter(w => w.id !== btn.dataset.wlRemove);
+          await setShared('waitlist', waitlistCache);
+          renderTabCitas();
+        });
+      });
+    }
+
+    el.querySelectorAll('button[data-act]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const act = btn.dataset.act;
+        if(act === 'eliminar'){
+          bookingsCache = bookingsCache.filter(x => x.id !== btn.dataset.id);
+        }else{
+          const b = bookingsCache.find(x => x.id === btn.dataset.id);
+          if(!b) return;
+          if(act === 'confirmar') b.status = 'confirmada';
+          else if(act === 'completar'){
+            b.status = 'completada';
+            const msg = `¡Gracias por venir a ${content.shopName}, ${b.name}! 🙌 Nos encantaría que nos dejaras tu reseña aquí: ${window.location.origin}/#resenas`;
+            window.open('https://wa.me/' + b.phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(msg), '_blank');
+          }
+          else if(act === 'cancelar') b.status = 'cancelada';
+        }
+        await setShared('bookings', bookingsCache);
+        renderTabCitas();
+      });
+    });
+
+    const csvBtn = document.getElementById('exportCsvBtn');
+    if(csvBtn){
+      csvBtn.addEventListener('click', () => {
+        const headers = ['Nombre','Teléfono','Servicio','Fecha','Hora','Estado'];
+        const rows = bookingsCache.map(b => [b.name, b.phone, b.service, b.date, b.time, b.status]);
+        const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `citas-${content.shopName.replace(/\s+/g,'-').toLowerCase()}.csv`;
+        a.click();
+      });
+    }
+  }
+
+  function wireManualAddButton(){
+    const toggleBtn = document.getElementById('manualAddBtn');
+    const formWrap = document.getElementById('manualAddForm');
+    if(!toggleBtn || !formWrap) return;
+    toggleBtn.addEventListener('click', () => {
+      const opening = formWrap.style.display === 'none';
+      formWrap.style.display = opening ? 'block' : 'none';
+      if(opening) renderManualAddForm();
+    });
+  }
+
+  function renderManualAddForm(){
+    const formWrap = document.getElementById('manualAddForm');
+    formWrap.style.marginBottom = '20px';
+    formWrap.innerHTML = `
+      <div class="field"><label>Nombre del cliente</label><input type="text" id="maName" placeholder="Nombre"></div>
+      <div class="row2">
+        <div class="field"><label>Teléfono del cliente (con código de país, ej. 521234567890)</label><input type="tel" id="maPhone" placeholder="521234567890"></div>
+        <div class="field"><label>Servicio</label>
+          <select id="maService">${content.services.map(s => `<option value="${s.name}">${s.name} — $${s.price}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="field"><label>Fecha</label><input type="date" id="maDate" min="${new Date().toISOString().split('T')[0]}"></div>
+      <div class="field">
+        <label>Horario</label>
+        <div class="slots" id="maSlots"><div class="loading">Elige una fecha primero.</div></div>
+      </div>
+      <button type="button" class="btn btn-sm" id="maSaveBtn">Guardar y avisar por WhatsApp</button>
+      <div class="msg" id="maMsg"></div>`;
+
+    let maSelectedTime = null;
+
+    function renderMaSlots(){
+      maSelectedTime = null;
+      const wrap = document.getElementById('maSlots');
+      const dateVal = document.getElementById('maDate').value;
+      const service = document.getElementById('maService').value;
+      if(!dateVal){ wrap.innerHTML = '<div class="loading">Elige una fecha primero.</div>'; return; }
+      const needed = getServiceSlots(service);
+      wrap.innerHTML = '';
+      allSlots.forEach((t, idx) => {
+        const taken = !hasRoomFrom(dateVal, idx, needed);
+        const elS = document.createElement('div');
+        elS.className = 'slot' + (taken ? ' disabled' : '');
+        elS.textContent = formatTime12(t);
+        if(!taken){
+          elS.addEventListener('click', () => {
+            maSelectedTime = t;
+            wrap.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+            elS.classList.add('selected');
+          });
+        }
+        wrap.appendChild(elS);
+      });
+    }
+    document.getElementById('maDate').addEventListener('change', renderMaSlots);
+    document.getElementById('maService').addEventListener('change', renderMaSlots);
+
+    document.getElementById('maSaveBtn').addEventListener('click', async () => {
+      const name = document.getElementById('maName').value.trim();
+      const phone = document.getElementById('maPhone').value.trim();
+      const service = document.getElementById('maService').value;
+      const date = document.getElementById('maDate').value;
+      const msg = document.getElementById('maMsg');
+      if(!name || !phone || !date || !maSelectedTime){
+        msg.className = 'msg error'; msg.textContent = 'Completa nombre, teléfono, fecha y horario.'; return;
+      }
+      msg.textContent = 'Guardando...';
+      try{
+        await loadBookings();
+        const needed = getServiceSlots(service);
+        const idx = allSlots.indexOf(maSelectedTime);
+        if(!hasRoomFrom(date, idx, needed)){
+          msg.className = 'msg error'; msg.textContent = 'Ese horario se acaba de ocupar, elige otro.'; renderMaSlots(); return;
+        }
+        const newBooking = { id: Date.now().toString(36), name, phone, service, barber: content.barberName, date, time: maSelectedTime, slotsUsed: needed, status: 'confirmada' };
+        bookingsCache.push(newBooking);
+        await setShared('bookings', bookingsCache);
+        const waLink = buildClientNotificationWaLink(name, phone, service, date, maSelectedTime);
+        window.open(waLink, '_blank');
+        msg.className = 'msg ok'; msg.textContent = '¡Cita guardada! Se abrió WhatsApp para avisarle al cliente.';
+        renderTabCitas();
+        document.getElementById('manualAddForm').style.display = 'block';
+        renderManualAddForm();
+      }catch(err){
+        msg.className = 'msg error'; msg.textContent = 'No se pudo guardar, intenta de nuevo.';
+      }
+    });
+  }
+
+  // ============ Pestaña Reseñas ============
+  function renderTabResenas(){
+    const el = document.getElementById('tabResenas');
+    if(!reviewsCache.length){ el.innerHTML = '<div class="empty-note">Aún no hay reseñas.</div>'; return; }
+    el.innerHTML = '';
+    reviewsCache.slice().reverse().forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      row.innerHTML = `
+        <div class="top-row"><strong>${r.name}</strong><span class="stars">${starString(r.stars)}</span></div>
+        <div style="color:var(--muted);">${r.comment}</div>
+        <div class="actions"><button class="btn btn-sm btn-danger" data-del="${r.id}">Eliminar</button></div>`;
+      el.appendChild(row);
+    });
+    el.querySelectorAll('button[data-del]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        reviewsCache = reviewsCache.filter(r => r.id !== btn.dataset.del);
+        await setShared('reviews', reviewsCache);
+        renderTabResenas();
+      });
+    });
+  }
+
+  // ============ Pestañas: cambio de vista ============
+  document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      ['contenido','citas','resenas'].forEach(t => document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).style.display = 'none');
+      const el = document.getElementById('tab'+tab.dataset.tab[0].toUpperCase()+tab.dataset.tab.slice(1));
+      el.style.display = 'block';
+    });
+  });
+
+  // ============ Notificaciones push (Fase 2, ahora ligadas a la cuenta real — Fase B) ============
+  const FCM_VAPID_KEY = "BMF3X4zm_ZVVa1DZ-R8ZBs_4pslwlv-WKTieFyKXQu0hsV91l1Cdao60ivA-9ifMZIfnDgMnjnEd_gzY0mCT-Ig";
+  async function setupPushNotifications(){
+    try{
+      if(!('Notification' in window) || !('serviceWorker' in navigator)){
+        console.warn('[Push] Este navegador no soporta notificaciones push.');
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if(permission !== 'granted'){ console.log('[Push] Permiso de notificaciones no concedido.'); return; }
+      const registration = await navigator.serviceWorker.register('sw.js');
+      const messaging = firebase.messaging();
+      const token = await messaging.getToken({ vapidKey: FCM_VAPID_KEY, serviceWorkerRegistration: registration });
+      if(!token){ console.warn('[Push] No se pudo obtener el token de notificaciones.'); return; }
+      const tokens = await getShared('adminTokens', []);
+      if(!tokens.includes(token)){
+        tokens.push(token);
+        await setShared('adminTokens', tokens);
+      }
+      console.log('[Push] Dispositivo registrado para notificaciones de citas nuevas.');
+    }catch(e){ console.error('[Push] Error configurando notificaciones push', e); }
+  }
+
+  // ============ Login (Fase B: cuenta real de Firebase Auth, solo cuentas en admin_users) ============
+  function authErrorMessage(err){
+    const code = err && err.code;
+    if(code === 'auth/invalid-email') return 'Correo inválido.';
+    if(code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Correo o contraseña incorrectos.';
+    if(code === 'auth/too-many-requests') return 'Demasiados intentos. Espera un momento e intenta de nuevo.';
+    return 'No se pudo iniciar sesión. ' + (err && err.message ? err.message : '');
+  }
+
+  function showLoginScreen(message){
+    document.getElementById('appShell').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    const msg = document.getElementById('adminLoginMsg');
+    msg.textContent = message || '';
+  }
+
+  async function showAppShellAndLoad(){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appShell').style.display = 'block';
+    document.getElementById('tabContenido').innerHTML = '<div class="loading">Cargando datos...</div>';
+    try{
+      content = await loadContent();
+      renderTabContenido();
+      await loadBookings(); await loadWaitlist(); renderTabCitas();
+      await loadReviews(); renderTabResenas();
+      setupPushNotifications();
+    }catch(err){
+      console.error('Error abriendo el panel', err);
+      document.getElementById('tabContenido').innerHTML =
+        `<div class="empty-note" style="color:#e08a8a;">Ocurrió un error al cargar el panel: ${err && err.message ? err.message : err}</div>`;
+    }
+  }
+
+  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pass = document.getElementById('adminPass').value;
+    const msg = document.getElementById('adminLoginMsg');
+    const status = document.getElementById('adminLoginStatus');
+    msg.textContent = '';
+    status.textContent = 'Entrando...';
+    try{
+      await auth.signInWithEmailAndPassword(email, pass);
+      // El resultado (mostrar el panel o negar el acceso) lo maneja onAuthStateChanged abajo.
+    }catch(err){
+      status.textContent = '';
+      msg.textContent = authErrorMessage(err);
+    }
+  });
+  document.getElementById('adminPass').addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') document.getElementById('adminLoginBtn').click();
+  });
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await auth.signOut();
+  });
+
+  // Se usa para que el mensaje de "sin acceso" sobreviva al signOut() que dispara este
+  // mismo listener otra vez (con user=null), en vez de perderse en la carrera async.
+  let pendingLoginMessage = null;
+
+  auth.onAuthStateChanged(async (user) => {
+    const status = document.getElementById('adminLoginStatus');
+    if(!user){
+      showLoginScreen(pendingLoginMessage);
+      pendingLoginMessage = null;
+      return;
+    }
+    status.textContent = 'Verificando acceso...';
+    let adminStatus;
+    try{
+      adminStatus = await checkIsAdmin(user.uid);
+    }catch(err){
+      // Falla de red/timeout al verificar: NO cerramos sesión (no sabemos si tiene
+      // acceso o no). Dejamos la sesión intacta y pedimos reintentar.
+      console.error('[Auth] No se pudo verificar admin_users', err);
+      status.textContent = '';
+      document.getElementById('adminLoginMsg').textContent = 'No se pudo verificar tu acceso (revisa tu conexión) — intenta de nuevo.';
+      return;
+    }
+    status.textContent = '';
+    if(adminStatus === 'blocked-by-rules'){
+      // No es un problema de la cuenta — las Reglas de Firestore todavía no permiten
+      // esta lectura. NO cerramos sesión: en cuanto se actualicen las reglas, basta
+      // con recargar la página para entrar, sin pedir el login de nuevo.
+      console.error('[Auth] Firestore devolvió 403 al leer admin_users — faltan actualizar las Reglas de Seguridad.');
+      document.getElementById('adminLoginMsg').textContent = 'Tu cuenta inició sesión, pero las Reglas de Firestore todavía no permiten verificar el acceso. Avísale a Claude para actualizarlas.';
+      return;
+    }
+    if(adminStatus === 'not-admin'){
+      pendingLoginMessage = 'Esta cuenta no tiene acceso al panel.';
+      await auth.signOut();
+      return;
+    }
+    await showAppShellAndLoad();
+  });
+</script>
+</body>
+</html>

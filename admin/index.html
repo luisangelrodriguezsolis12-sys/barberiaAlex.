@@ -46,6 +46,11 @@
   .btn-danger{background:transparent; border-color:rgba(224,138,138,.4); color:#e08a8a;}
   .btn-danger:hover{background:rgba(224,138,138,.1); color:#e08a8a;}
 
+  .float-btn{position:fixed; right:24px; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; text-decoration:none; z-index:200; transition:transform .2s, box-shadow .2s;}
+  .float-btn:hover{transform:scale(1.09);}
+  .float-install{bottom:24px; background:var(--cream); color:var(--bg); box-shadow:0 4px 12px rgba(0,0,0,.3); border:none; cursor:pointer;}
+  @media (max-width:480px){ .float-btn{width:46px; height:46px; font-size:1.15rem; right:14px;} .float-install{bottom:16px;} }
+
   /* ---- pantalla de login ---- */
   #loginScreen{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
   .login-card{width:100%; max-width:360px; text-align:center;}
@@ -142,6 +147,14 @@
 </head>
 <body>
 
+<button class="float-btn float-install install-trigger" style="display:none;" aria-label="Instalar app">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"></path>
+    <path d="M7 10l5 5 5-5"></path>
+    <path d="M4 19h16"></path>
+  </svg>
+</button>
+
 <div id="loginScreen">
   <div class="login-card">
     <h1>Casa Negra Admin</h1>
@@ -197,6 +210,16 @@
       const { token } = await appCheck.getToken();
       return { 'X-Firebase-AppCheck': token };
     }catch(e){ console.warn('[AppCheck] No se pudo obtener el token', e); return {}; }
+  }
+
+  // ============ Service worker propio de /admin/ (independiente del sitio público) ============
+  // Se registra sin condición, al cargar la página — igual que en el sitio público —
+  // para que /admin/ tenga su propio scope activo desde la primera visita y no quede
+  // bajo el control del service worker de raíz (firebase-messaging-sw.js del sitio público).
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch((e) => console.warn('No se pudo registrar el service worker de /admin/', e));
+    });
   }
 
   // Token de la cuenta con sesión iniciada, para mandarlo en cada llamada a Firestore
@@ -1130,6 +1153,38 @@
       return;
     }
     await showAppShellAndLoad();
+  });
+
+  // ============ Instalar como app (PWA) ============
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+  function showInstallTriggers(){
+    if(isStandalone) return;
+    document.querySelectorAll('.install-trigger').forEach(el => { el.style.display = 'inline-flex'; });
+  }
+
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+  });
+
+  // Mostramos el botón desde el inicio (no esperamos a que el navegador decida ofrecer el prompt)
+  if(!isStandalone) showInstallTriggers();
+
+  function triggerInstall(){
+    if(deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.finally(() => { deferredInstallPrompt = null; });
+    }else if(isIos){
+      alert('Para instalar: toca el botón de compartir de tu navegador y luego "Agregar a pantalla de inicio".');
+    }else{
+      alert('Para instalar: abre el menú de tu navegador (los tres puntitos ⋮ arriba a la derecha) y busca "Instalar app" o "Agregar a pantalla de inicio".');
+    }
+  }
+  document.addEventListener('click', (e) => {
+    if(e.target && e.target.closest('.install-trigger')) triggerInstall();
   });
 </script>
 </body>
